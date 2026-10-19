@@ -33,7 +33,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.K4J_LPG_Branch_Operation_and_Information_Management_System.SuperAdminSettings
+            Me.MainForm = Global.K4J_LPG_Branch_Operation_and_Information_Management_System.AdminCustomers
         End Sub
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
