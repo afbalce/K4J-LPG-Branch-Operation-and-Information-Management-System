@@ -22,18 +22,16 @@ Partial Class SuperAdminAdminAccounts
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SuperAdminAdminAccounts))
         AdminAccountsMainContainer = New SplitContainer()
         SuperAdminSidebarNavigation1 = New SuperAdminSidebarNavigation()
         adminAccountsContentContainer = New SplitContainer()
         HeaderBar1 = New HeaderBar()
         mainContentHolder = New SplitContainer()
+        addAdminButton = New RoundedButton()
         SystemHeading1 = New SystemHeading()
-        SidebarAndContent = New SplitContainer()
-        sidebarPanel = New Panel()
-        settingsSidebarPanel = New RoundedTitlePanel()
-        SecurityButton = New RoundedButton()
-        BranchButton = New RoundedButton()
-        GeneralButton = New RoundedButton()
+        mainContents = New SplitContainer()
+        AdminAccountsCards1 = New AdminAccountsCards()
         CType(AdminAccountsMainContainer, ComponentModel.ISupportInitialize).BeginInit()
         AdminAccountsMainContainer.Panel1.SuspendLayout()
         AdminAccountsMainContainer.Panel2.SuspendLayout()
@@ -46,16 +44,16 @@ Partial Class SuperAdminAdminAccounts
         mainContentHolder.Panel1.SuspendLayout()
         mainContentHolder.Panel2.SuspendLayout()
         mainContentHolder.SuspendLayout()
-        CType(SidebarAndContent, ComponentModel.ISupportInitialize).BeginInit()
-        SidebarAndContent.Panel1.SuspendLayout()
-        SidebarAndContent.SuspendLayout()
-        sidebarPanel.SuspendLayout()
-        settingsSidebarPanel.SuspendLayout()
+        CType(mainContents, ComponentModel.ISupportInitialize).BeginInit()
+        mainContents.Panel1.SuspendLayout()
+        mainContents.SuspendLayout()
         SuspendLayout()
         ' 
         ' AdminAccountsMainContainer
         ' 
         AdminAccountsMainContainer.Dock = DockStyle.Fill
+        AdminAccountsMainContainer.FixedPanel = FixedPanel.Panel1
+        AdminAccountsMainContainer.IsSplitterFixed = True
         AdminAccountsMainContainer.Location = New Point(0, 0)
         AdminAccountsMainContainer.Name = "AdminAccountsMainContainer"
         ' 
@@ -73,7 +71,7 @@ Partial Class SuperAdminAdminAccounts
         ' SuperAdminSidebarNavigation1
         ' 
         SuperAdminSidebarNavigation1.BackColor = Color.FromArgb(CByte(12), CByte(22), CByte(40))
-        SuperAdminSidebarNavigation1.Dock = DockStyle.Left
+        SuperAdminSidebarNavigation1.Dock = DockStyle.Fill
         SuperAdminSidebarNavigation1.Location = New Point(0, 0)
         SuperAdminSidebarNavigation1.Name = "SuperAdminSidebarNavigation1"
         SuperAdminSidebarNavigation1.Size = New Size(250, 724)
@@ -81,7 +79,7 @@ Partial Class SuperAdminAdminAccounts
         ' 
         ' adminAccountsContentContainer
         ' 
-        adminAccountsContentContainer.Dock = DockStyle.Top
+        adminAccountsContentContainer.Dock = DockStyle.Fill
         adminAccountsContentContainer.FixedPanel = FixedPanel.Panel1
         adminAccountsContentContainer.IsSplitterFixed = True
         adminAccountsContentContainer.Location = New Point(0, 0)
@@ -96,12 +94,13 @@ Partial Class SuperAdminAdminAccounts
         ' 
         adminAccountsContentContainer.Panel2.Controls.Add(mainContentHolder)
         adminAccountsContentContainer.Size = New Size(924, 724)
+        adminAccountsContentContainer.SplitterDistance = 56
         adminAccountsContentContainer.TabIndex = 0
         ' 
         ' HeaderBar1
         ' 
         HeaderBar1.BackColor = Color.White
-        HeaderBar1.Dock = DockStyle.Top
+        HeaderBar1.Dock = DockStyle.Fill
         HeaderBar1.Location = New Point(0, 0)
         HeaderBar1.Margin = New Padding(0)
         HeaderBar1.Name = "HeaderBar1"
@@ -119,14 +118,39 @@ Partial Class SuperAdminAdminAccounts
         ' 
         ' mainContentHolder.Panel1
         ' 
+        mainContentHolder.Panel1.Controls.Add(addAdminButton)
         mainContentHolder.Panel1.Controls.Add(SystemHeading1)
         ' 
         ' mainContentHolder.Panel2
         ' 
-        mainContentHolder.Panel2.Controls.Add(SidebarAndContent)
-        mainContentHolder.Size = New Size(924, 670)
+        mainContentHolder.Panel2.Controls.Add(mainContents)
+        mainContentHolder.Size = New Size(924, 664)
         mainContentHolder.SplitterDistance = 80
         mainContentHolder.TabIndex = 0
+        ' 
+        ' addAdminButton
+        ' 
+        addAdminButton.BackColor = Color.Transparent
+        addAdminButton.BorderColor = Color.FromArgb(CByte(232), CByte(101), CByte(10))
+        addAdminButton.CornerRadius = 10
+        addAdminButton.FillColor = Color.FromArgb(CByte(232), CByte(101), CByte(10))
+        addAdminButton.FlatAppearance.BorderSize = 0
+        addAdminButton.FlatStyle = FlatStyle.Flat
+        addAdminButton.Font = New Font("Inter SemiBold", 7F, FontStyle.Bold)
+        addAdminButton.ForeColor = Color.White
+        addAdminButton.IconHeight = 16
+        addAdminButton.IconTextSpacing = 8
+        addAdminButton.IconWidth = 16
+        addAdminButton.Image = CType(resources.GetObject("addAdminButton.Image"), Image)
+        addAdminButton.ImageAlign = ContentAlignment.MiddleLeft
+        addAdminButton.Location = New Point(750, 25)
+        addAdminButton.MinimumSize = New Size(50, 25)
+        addAdminButton.Name = "addAdminButton"
+        addAdminButton.Size = New Size(160, 32)
+        addAdminButton.TabIndex = 1
+        addAdminButton.Text = " Add Admin"
+        addAdminButton.TextImageRelation = TextImageRelation.ImageBeforeText
+        addAdminButton.UseVisualStyleBackColor = False
         ' 
         ' SystemHeading1
         ' 
@@ -138,105 +162,29 @@ Partial Class SuperAdminAdminAccounts
         SystemHeading1.Size = New Size(924, 82)
         SystemHeading1.TabIndex = 0
         ' 
-        ' SidebarAndContent
+        ' mainContents
         ' 
-        SidebarAndContent.Dock = DockStyle.Fill
-        SidebarAndContent.Location = New Point(0, 0)
-        SidebarAndContent.Name = "SidebarAndContent"
+        mainContents.Dock = DockStyle.Fill
+        mainContents.FixedPanel = FixedPanel.Panel1
+        mainContents.IsSplitterFixed = True
+        mainContents.Location = New Point(0, 0)
+        mainContents.Name = "mainContents"
+        mainContents.Orientation = Orientation.Horizontal
         ' 
-        ' SidebarAndContent.Panel1
+        ' mainContents.Panel1
         ' 
-        SidebarAndContent.Panel1.CausesValidation = False
-        SidebarAndContent.Panel1.Controls.Add(sidebarPanel)
-        SidebarAndContent.Size = New Size(924, 586)
-        SidebarAndContent.SplitterDistance = 150
-        SidebarAndContent.TabIndex = 0
+        mainContents.Panel1.Controls.Add(AdminAccountsCards1)
+        mainContents.Size = New Size(924, 580)
+        mainContents.SplitterDistance = 105
+        mainContents.TabIndex = 0
         ' 
-        ' sidebarPanel
+        ' AdminAccountsCards1
         ' 
-        sidebarPanel.Controls.Add(settingsSidebarPanel)
-        sidebarPanel.Dock = DockStyle.Fill
-        sidebarPanel.Location = New Point(0, 0)
-        sidebarPanel.Name = "sidebarPanel"
-        sidebarPanel.Size = New Size(150, 586)
-        sidebarPanel.TabIndex = 0
-        ' 
-        ' settingsSidebarPanel
-        ' 
-        settingsSidebarPanel.BackColor = Color.Transparent
-        settingsSidebarPanel.BorderColor = Color.FromArgb(CByte(229), CByte(231), CByte(235))
-        settingsSidebarPanel.BorderOpacity = 80
-        settingsSidebarPanel.Controls.Add(SecurityButton)
-        settingsSidebarPanel.Controls.Add(BranchButton)
-        settingsSidebarPanel.Controls.Add(GeneralButton)
-        settingsSidebarPanel.FillColor = Color.White
-        settingsSidebarPanel.Location = New Point(15, 15)
-        settingsSidebarPanel.Name = "settingsSidebarPanel"
-        settingsSidebarPanel.Size = New Size(120, 150)
-        settingsSidebarPanel.TabIndex = 0
-        ' 
-        ' SecurityButton
-        ' 
-        SecurityButton.BackColor = Color.Transparent
-        SecurityButton.BorderColor = Color.Transparent
-        SecurityButton.CornerRadius = 5
-        SecurityButton.FillColor = Color.Transparent
-        SecurityButton.FlatAppearance.BorderSize = 0
-        SecurityButton.FlatStyle = FlatStyle.Flat
-        SecurityButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        SecurityButton.ForeColor = Color.FromArgb(CByte(50), CByte(50), CByte(50))
-        SecurityButton.ImageAlign = ContentAlignment.MiddleLeft
-        SecurityButton.Location = New Point(15, 96)
-        SecurityButton.MinimumSize = New Size(50, 10)
-        SecurityButton.Name = "SecurityButton"
-        SecurityButton.Size = New Size(90, 30)
-        SecurityButton.TabIndex = 2
-        SecurityButton.Text = "Security"
-        SecurityButton.TextAlign = ContentAlignment.MiddleLeft
-        SecurityButton.TextImageRelation = TextImageRelation.ImageBeforeText
-        SecurityButton.UseVisualStyleBackColor = False
-        ' 
-        ' BranchButton
-        ' 
-        BranchButton.BackColor = Color.Transparent
-        BranchButton.BorderColor = Color.Transparent
-        BranchButton.CornerRadius = 5
-        BranchButton.FillColor = Color.Transparent
-        BranchButton.FlatAppearance.BorderSize = 0
-        BranchButton.FlatStyle = FlatStyle.Flat
-        BranchButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        BranchButton.ForeColor = Color.FromArgb(CByte(50), CByte(50), CByte(50))
-        BranchButton.ImageAlign = ContentAlignment.MiddleLeft
-        BranchButton.Location = New Point(15, 60)
-        BranchButton.MinimumSize = New Size(50, 10)
-        BranchButton.Name = "BranchButton"
-        BranchButton.Size = New Size(90, 30)
-        BranchButton.TabIndex = 1
-        BranchButton.Text = "Branch"
-        BranchButton.TextAlign = ContentAlignment.MiddleLeft
-        BranchButton.TextImageRelation = TextImageRelation.ImageBeforeText
-        BranchButton.UseVisualStyleBackColor = False
-        ' 
-        ' GeneralButton
-        ' 
-        GeneralButton.BackColor = Color.Transparent
-        GeneralButton.BorderColor = Color.Transparent
-        GeneralButton.CornerRadius = 5
-        GeneralButton.FillColor = Color.Transparent
-        GeneralButton.FlatAppearance.BorderSize = 0
-        GeneralButton.FlatStyle = FlatStyle.Flat
-        GeneralButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        GeneralButton.ForeColor = Color.FromArgb(CByte(50), CByte(50), CByte(50))
-        GeneralButton.ImageAlign = ContentAlignment.MiddleLeft
-        GeneralButton.Location = New Point(15, 24)
-        GeneralButton.MinimumSize = New Size(50, 10)
-        GeneralButton.Name = "GeneralButton"
-        GeneralButton.Size = New Size(90, 30)
-        GeneralButton.TabIndex = 0
-        GeneralButton.Text = "General"
-        GeneralButton.TextAlign = ContentAlignment.MiddleLeft
-        GeneralButton.TextImageRelation = TextImageRelation.ImageBeforeText
-        GeneralButton.UseVisualStyleBackColor = False
+        AdminAccountsCards1.Dock = DockStyle.Top
+        AdminAccountsCards1.Location = New Point(0, 0)
+        AdminAccountsCards1.Name = "AdminAccountsCards1"
+        AdminAccountsCards1.Size = New Size(924, 115)
+        AdminAccountsCards1.TabIndex = 1
         ' 
         ' SuperAdminAdminAccounts
         ' 
@@ -258,11 +206,9 @@ Partial Class SuperAdminAdminAccounts
         mainContentHolder.Panel2.ResumeLayout(False)
         CType(mainContentHolder, ComponentModel.ISupportInitialize).EndInit()
         mainContentHolder.ResumeLayout(False)
-        SidebarAndContent.Panel1.ResumeLayout(False)
-        CType(SidebarAndContent, ComponentModel.ISupportInitialize).EndInit()
-        SidebarAndContent.ResumeLayout(False)
-        sidebarPanel.ResumeLayout(False)
-        settingsSidebarPanel.ResumeLayout(False)
+        mainContents.Panel1.ResumeLayout(False)
+        CType(mainContents, ComponentModel.ISupportInitialize).EndInit()
+        mainContents.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -272,11 +218,10 @@ Partial Class SuperAdminAdminAccounts
     Friend WithEvents HeaderBar1 As HeaderBar
     Friend WithEvents mainContentHolder As SplitContainer
     Friend WithEvents SystemHeading1 As SystemHeading
-    Friend WithEvents SidebarAndContent As SplitContainer
-    Friend WithEvents sidebarPanel As Panel
-    Friend WithEvents settingsSidebarPanel As RoundedTitlePanel
-    Friend WithEvents GeneralButton As RoundedButton
-    Friend WithEvents SecurityButton As RoundedButton
-    Friend WithEvents BranchButton As RoundedButton
+    Friend WithEvents mainContents As SplitContainer
+    Friend WithEvents AdminAccountsCards1 As AdminAccountsCards
+    Friend WithEvents addAdminButton As RoundedButton
 End Class
+
+
 

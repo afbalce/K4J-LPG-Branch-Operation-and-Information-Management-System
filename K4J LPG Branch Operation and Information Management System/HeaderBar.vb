@@ -351,32 +351,13 @@ Public Class HeaderBar
             ' CLOCK ICON
             ' ==================================
 
-            _clockIcon = New PictureBox With {
-                .Name = "headerClockIcon",
-                .BackColor = Color.Transparent,
-                .SizeMode = PictureBoxSizeMode.Zoom,
-                .TabStop = False
-            }
-
-            dateTimePlaceholder.Controls.Add(_clockIcon)
-
-            LoadPng(_clockIcon, "clock.png")
+            _clockIcon = headerClockIcon
 
             ' ==================================
             ' NOTIFICATION ICON
             ' ==================================
 
-            _bellIcon = New PictureBox With {
-                .Name = "headerNotificationIcon",
-                .BackColor = Color.Transparent,
-                .SizeMode = PictureBoxSizeMode.Zoom,
-                .Cursor = Cursors.Hand,
-                .TabStop = False
-            }
-
-            Me.Controls.Add(_bellIcon)
-
-            LoadPng(_bellIcon, "notification.png")
+            _bellIcon = headerNotificationIcon
 
             AddHandler _bellIcon.Click,
                 AddressOf NotificationClick

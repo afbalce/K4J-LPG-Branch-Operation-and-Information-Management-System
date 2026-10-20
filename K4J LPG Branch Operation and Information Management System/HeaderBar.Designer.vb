@@ -22,6 +22,9 @@ Partial Class HeaderBar
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(HeaderBar))
+        headerClockIcon = New PictureBox()
+        headerNotificationIcon = New PictureBox()
         roleHeadingLabel = New Label()
         panelHeadingLabel = New Label()
         dateTimePlaceholder = New RoundedTitlePanel()
@@ -56,6 +59,7 @@ Partial Class HeaderBar
         dateTimePlaceholder.BackColor = Color.Transparent
         dateTimePlaceholder.BorderColor = Color.FromArgb(CByte(229), CByte(231), CByte(235))
         dateTimePlaceholder.Controls.Add(DateandTime)
+        dateTimePlaceholder.Controls.Add(headerClockIcon)
         dateTimePlaceholder.CornerRadius = 10
         dateTimePlaceholder.FillColor = Color.FromArgb(CByte(249), CByte(250), CByte(251))
         dateTimePlaceholder.Location = New Point(630, 10)
@@ -72,12 +76,32 @@ Partial Class HeaderBar
         DateandTime.Size = New Size(184, 18)
         DateandTime.TabIndex = 0
         DateandTime.Text = "Oct 16, 2026 | 2:41 AM"
+        '
+        ' Header icons
+        '
+        headerClockIcon.Name = "headerClockIcon"
+        headerClockIcon.Image = CType(resources.GetObject("headerClockIcon.Image"), Image)
+        headerClockIcon.BackColor = Color.Transparent
+        headerClockIcon.SizeMode = PictureBoxSizeMode.Zoom
+        headerClockIcon.Location = New Point(10, 8)
+        headerClockIcon.Size = New Size(16, 16)
+        headerClockIcon.TabStop = False
+        headerNotificationIcon.Name = "headerNotificationIcon"
+        headerNotificationIcon.Image = CType(resources.GetObject("headerNotificationIcon.Image"), Image)
+        headerNotificationIcon.BackColor = Color.Transparent
+        headerNotificationIcon.SizeMode = PictureBoxSizeMode.Zoom
+        headerNotificationIcon.Location = New Point(882, 15)
+        headerNotificationIcon.Size = New Size(20, 20)
+        headerNotificationIcon.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        headerNotificationIcon.Cursor = Cursors.Hand
+        headerNotificationIcon.TabStop = False
         ' 
         ' HeaderBar
         ' 
         AutoScaleDimensions = New SizeF(10F, 25F)
         AutoScaleMode = AutoScaleMode.Font
         Controls.Add(dateTimePlaceholder)
+        Controls.Add(headerNotificationIcon)
         Controls.Add(panelHeadingLabel)
         Controls.Add(roleHeadingLabel)
         Name = "HeaderBar"
@@ -92,5 +116,7 @@ Partial Class HeaderBar
     Friend WithEvents panelHeadingLabel As Label
     Friend WithEvents dateTimePlaceholder As RoundedTitlePanel
     Friend WithEvents DateandTime As Label
+    Friend WithEvents headerClockIcon As PictureBox
+    Friend WithEvents headerNotificationIcon As PictureBox
 
 End Class

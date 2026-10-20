@@ -1,4 +1,4 @@
-﻿
+
 Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel
@@ -79,7 +79,7 @@ Public Class SuperAdminSidebarNavigation
     Private _navItemsSurface As Panel
     Private _navVerticalOnly As VScrollBar
 
-    Private k4jLogoPicture As PictureBox
+
 
     ' INITIALS CONTROLS
     Private _initialsTile As Control
@@ -1412,6 +1412,15 @@ Public Class SuperAdminSidebarNavigation
     Private Sub SetupLogo()
 
         If k4jLogoPicture IsNot Nothing Then
+            If k4jLogoPicture.Parent IsNot headerPanel AndAlso k4jLogoPicture.Image IsNot Nothing Then
+                Using source As New Bitmap(k4jLogoPicture.Image)
+                    Dim cropped = source.Clone(GetVisibleBounds(source), PixelFormat.Format32bppArgb)
+                    k4jLogoPicture.Image.Dispose()
+                    k4jLogoPicture.Image = cropped
+                End Using
+            End If
+            headerPanel.Controls.Add(k4jLogoPicture)
+            k4jLogoPicture.Visible = True
             Return
         End If
 
@@ -2477,5 +2486,4 @@ Public Class SuperAdminSidebarNavigation
         End If
 
     End Sub
-
 End Class

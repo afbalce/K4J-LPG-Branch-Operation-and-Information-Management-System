@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SuperAdminSidebarNavigation
     Inherits System.Windows.Forms.UserControl
 
@@ -22,6 +22,8 @@ Partial Class SuperAdminSidebarNavigation
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(SuperAdminSidebarNavigation))
+        k4jLogoPicture = New PictureBox()
         k4jTitle = New Label()
         Label1 = New Label()
         userPlaceholder = New RoundedTitlePanel()
@@ -241,9 +243,10 @@ Partial Class SuperAdminSidebarNavigation
         dashboardButton.FlatStyle = FlatStyle.Flat
         dashboardButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         dashboardButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        dashboardButton.IconFileName = "dashboard.png"
-        dashboardButton.IconHeight = 60
-        dashboardButton.IconWidth = 60
+        dashboardButton.Image = CType(resources.GetObject("dashboardButton.Image"), Image)
+        dashboardButton.CenterIconAndText = False
+        dashboardButton.IconHeight = 18
+        dashboardButton.IconWidth = 18
         dashboardButton.ImageAlign = ContentAlignment.MiddleLeft
         dashboardButton.Location = New Point(17, 173)
         dashboardButton.MinimumSize = New Size(50, 25)
@@ -266,9 +269,10 @@ Partial Class SuperAdminSidebarNavigation
         adminAccButton.FlatStyle = FlatStyle.Flat
         adminAccButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         adminAccButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        adminAccButton.IconFileName = "dashboard.png"
-        adminAccButton.IconHeight = 60
-        adminAccButton.IconWidth = 60
+        adminAccButton.Image = CType(resources.GetObject("adminAccButton.Image"), Image)
+        adminAccButton.CenterIconAndText = False
+        adminAccButton.IconHeight = 18
+        adminAccButton.IconWidth = 18
         adminAccButton.ImageAlign = ContentAlignment.MiddleLeft
         adminAccButton.Location = New Point(17, 223)
         adminAccButton.MinimumSize = New Size(50, 25)
@@ -291,9 +295,10 @@ Partial Class SuperAdminSidebarNavigation
         riderAccButton.FlatStyle = FlatStyle.Flat
         riderAccButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         riderAccButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        riderAccButton.IconFileName = "dashboard.png"
-        riderAccButton.IconHeight = 60
-        riderAccButton.IconWidth = 60
+        riderAccButton.Image = CType(resources.GetObject("riderAccButton.Image"), Image)
+        riderAccButton.CenterIconAndText = False
+        riderAccButton.IconHeight = 18
+        riderAccButton.IconWidth = 18
         riderAccButton.ImageAlign = ContentAlignment.MiddleLeft
         riderAccButton.Location = New Point(18, 254)
         riderAccButton.MinimumSize = New Size(50, 25)
@@ -316,9 +321,10 @@ Partial Class SuperAdminSidebarNavigation
         productsButton.FlatStyle = FlatStyle.Flat
         productsButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         productsButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        productsButton.IconFileName = "dashboard.png"
-        productsButton.IconHeight = 60
-        productsButton.IconWidth = 60
+        productsButton.Image = CType(resources.GetObject("productsButton.Image"), Image)
+        productsButton.CenterIconAndText = False
+        productsButton.IconHeight = 18
+        productsButton.IconWidth = 18
         productsButton.ImageAlign = ContentAlignment.MiddleLeft
         productsButton.Location = New Point(16, 295)
         productsButton.MinimumSize = New Size(50, 25)
@@ -341,9 +347,10 @@ Partial Class SuperAdminSidebarNavigation
         globalInventoryButton.FlatStyle = FlatStyle.Flat
         globalInventoryButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         globalInventoryButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        globalInventoryButton.IconFileName = "dashboard.png"
-        globalInventoryButton.IconHeight = 60
-        globalInventoryButton.IconWidth = 60
+        globalInventoryButton.Image = CType(resources.GetObject("globalInventoryButton.Image"), Image)
+        globalInventoryButton.CenterIconAndText = False
+        globalInventoryButton.IconHeight = 18
+        globalInventoryButton.IconWidth = 18
         globalInventoryButton.ImageAlign = ContentAlignment.MiddleLeft
         globalInventoryButton.Location = New Point(17, 326)
         globalInventoryButton.MinimumSize = New Size(50, 25)
@@ -366,9 +373,10 @@ Partial Class SuperAdminSidebarNavigation
         customersButton.FlatStyle = FlatStyle.Flat
         customersButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         customersButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        customersButton.IconFileName = "dashboard.png"
-        customersButton.IconHeight = 60
-        customersButton.IconWidth = 60
+        customersButton.Image = CType(resources.GetObject("customersButton.Image"), Image)
+        customersButton.CenterIconAndText = False
+        customersButton.IconHeight = 18
+        customersButton.IconWidth = 18
         customersButton.ImageAlign = ContentAlignment.MiddleLeft
         customersButton.Location = New Point(17, 367)
         customersButton.MinimumSize = New Size(50, 25)
@@ -391,9 +399,10 @@ Partial Class SuperAdminSidebarNavigation
         deliveriesButton.FlatStyle = FlatStyle.Flat
         deliveriesButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         deliveriesButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        deliveriesButton.IconFileName = "dashboard.png"
-        deliveriesButton.IconHeight = 60
-        deliveriesButton.IconWidth = 60
+        deliveriesButton.Image = CType(resources.GetObject("deliveriesButton.Image"), Image)
+        deliveriesButton.CenterIconAndText = False
+        deliveriesButton.IconHeight = 18
+        deliveriesButton.IconWidth = 18
         deliveriesButton.ImageAlign = ContentAlignment.MiddleLeft
         deliveriesButton.Location = New Point(17, 398)
         deliveriesButton.MinimumSize = New Size(50, 25)
@@ -416,9 +425,10 @@ Partial Class SuperAdminSidebarNavigation
         eodButton.FlatStyle = FlatStyle.Flat
         eodButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         eodButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        eodButton.IconFileName = "dashboard.png"
-        eodButton.IconHeight = 60
-        eodButton.IconWidth = 60
+        eodButton.Image = CType(resources.GetObject("eodButton.Image"), Image)
+        eodButton.CenterIconAndText = False
+        eodButton.IconHeight = 18
+        eodButton.IconWidth = 18
         eodButton.ImageAlign = ContentAlignment.MiddleLeft
         eodButton.Location = New Point(20, 439)
         eodButton.MinimumSize = New Size(50, 25)
@@ -441,9 +451,10 @@ Partial Class SuperAdminSidebarNavigation
         reportsButton.FlatStyle = FlatStyle.Flat
         reportsButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         reportsButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        reportsButton.IconFileName = "dashboard.png"
-        reportsButton.IconHeight = 60
-        reportsButton.IconWidth = 60
+        reportsButton.Image = CType(resources.GetObject("reportsButton.Image"), Image)
+        reportsButton.CenterIconAndText = False
+        reportsButton.IconHeight = 18
+        reportsButton.IconWidth = 18
         reportsButton.ImageAlign = ContentAlignment.MiddleLeft
         reportsButton.Location = New Point(20, 470)
         reportsButton.MinimumSize = New Size(50, 25)
@@ -466,9 +477,10 @@ Partial Class SuperAdminSidebarNavigation
         settingsButton.FlatStyle = FlatStyle.Flat
         settingsButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         settingsButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        settingsButton.IconFileName = "dashboard.png"
-        settingsButton.IconHeight = 60
-        settingsButton.IconWidth = 60
+        settingsButton.Image = CType(resources.GetObject("settingsButton.Image"), Image)
+        settingsButton.CenterIconAndText = False
+        settingsButton.IconHeight = 18
+        settingsButton.IconWidth = 18
         settingsButton.ImageAlign = ContentAlignment.MiddleLeft
         settingsButton.Location = New Point(17, 511)
         settingsButton.MinimumSize = New Size(50, 25)
@@ -491,9 +503,10 @@ Partial Class SuperAdminSidebarNavigation
         signOutButton.FlatStyle = FlatStyle.Flat
         signOutButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         signOutButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        signOutButton.IconFileName = "dashboard.png"
-        signOutButton.IconHeight = 60
-        signOutButton.IconWidth = 60
+        signOutButton.Image = CType(resources.GetObject("signOutButton.Image"), Image)
+        signOutButton.CenterIconAndText = False
+        signOutButton.IconHeight = 18
+        signOutButton.IconWidth = 18
         signOutButton.ImageAlign = ContentAlignment.MiddleLeft
         signOutButton.Location = New Point(20, 675)
         signOutButton.MinimumSize = New Size(50, 25)
@@ -538,6 +551,14 @@ Partial Class SuperAdminSidebarNavigation
         userInitialsPlaceholder.PerformLayout()
         userRolePlaceholder.ResumeLayout(False)
         userRolePlaceholder.PerformLayout()
+        k4jLogoPicture.Name = "k4jLogoPicture"
+        k4jLogoPicture.Image = CType(resources.GetObject("k4jLogoPicture.Image"), Image)
+        k4jLogoPicture.SizeMode = PictureBoxSizeMode.Zoom
+        k4jLogoPicture.BackColor = Color.Transparent
+        k4jLogoPicture.Location = New Point(15, 8)
+        k4jLogoPicture.Size = New Size(60, 60)
+        k4jLogoPicture.TabStop = False
+        Controls.Add(k4jLogoPicture)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -568,4 +589,5 @@ Partial Class SuperAdminSidebarNavigation
     Friend WithEvents userInitialsPlaceholder As RoundedTitlePanel
     Friend WithEvents userInitalLabel As Label
 
+    Friend WithEvents k4jLogoPicture As PictureBox
 End Class

@@ -49,6 +49,8 @@ Public Class SuperAdminSettings
     ' STATE
     ' ==========================================
 
+    Private _settingsVerticalOnly As VScrollBar
+    Private _settingsLayoutPending As Boolean
     Private _ready As Boolean = False
     Private _busy As Boolean = False
 
@@ -65,7 +67,7 @@ Public Class SuperAdminSettings
 
     ' ==========================================
     ' DPI SCALING
-    ' Used by the main window layout only.
+    ' Used by the window and settings navigation layouts.
     ' ==========================================
 
     Private Function Px(value As Integer) As Integer
@@ -139,7 +141,7 @@ Public Class SuperAdminSettings
 
     ' ==========================================
     ' APPLY INTER SEMIBOLD
-    ' Preserve each button's Designer font size.
+    ' Use larger, readable settings navigation text.
     ' ==========================================
 
     Private Sub ApplyButtonFont(
@@ -148,12 +150,11 @@ Public Class SuperAdminSettings
 
         If btn Is Nothing Then Return
 
-        Dim originalSize As Single =
-            btn.Font.SizeInPoints
+        Dim buttonFontSize As Single = 11.0F
 
         Dim newFont As New Font(
             _fontFamilyName,
-            originalSize,
+            buttonFontSize,
             _fontStyle,
             GraphicsUnit.Point
         )
@@ -204,10 +205,10 @@ Public Class SuperAdminSettings
                 Screen.FromControl(Me).WorkingArea
 
             Dim minWidth As Integer =
-                Math.Min(work.Width, Px(520))
+                Math.Min(work.Width, Px(720))
 
             Dim minHeight As Integer =
-                Math.Min(work.Height, Px(360))
+                Math.Min(work.Height, Px(480))
 
             Me.MinimumSize =
                 New Size(minWidth, minHeight)
@@ -262,8 +263,7 @@ Public Class SuperAdminSettings
             SetupHeader()
             SetupSystemHeading()
 
-            ' Settings controls use their
-            ' original Designer layout.
+            ' Configure the responsive settings navigation.
             SetupSettingsNavigation()
 
             If _sidebar IsNot Nothing Then
@@ -376,35 +376,42 @@ Public Class SuperAdminSettings
 
     ' ==========================================
     ' SETTINGS NAVIGATION
-    '
-    ' NO CUSTOM RESIZING.
-    ' NO REPARENTING.
-    ' NO SETBOUNDS.
-    ' NO CHANGING DOCK OR ANCHOR.
-    '
-    ' All five controls retain their
-    ' original Visual Studio Designer layout.
     ' ==========================================
 
     Private Sub SetupSettingsNavigation()
 
-        ' ==================================
-        ' USE EXISTING DESIGNER CONTROLS
-        ' ==================================
+        SplitContainer1.Panel1MinSize = 0
+        SplitContainer1.Panel2MinSize = 0
+        SplitContainer1.IsSplitterFixed = True
+        SettingsSidebarNavigation.Dock = DockStyle.None
+        SettingsSidebarNavigation.Anchor = AnchorStyles.Top Or AnchorStyles.Left
+        SettingsSidebarNavigation.Padding = New Padding(Px(3))
+        SettingsSidebarNavigation.AutoScroll = False
+        SettingsSidebarNavigation.AutoScrollMinSize = Size.Empty
+        settingsSidebarPanel.Dock = DockStyle.None
+        settingsSidebarPanel.Anchor = AnchorStyles.Top Or AnchorStyles.Left
+        _settingsVerticalOnly = New VScrollBar With {
+            .Name = "settingsVerticalOnly",
+            .Width = SystemInformation.VerticalScrollBarWidth,
+            .Visible = False,
+            .Minimum = 0
+        }
+        SettingsSidebarNavigation.Controls.Add(_settingsVerticalOnly)
+        _settingsVerticalOnly.BringToFront()
+        AddHandler _settingsVerticalOnly.ValueChanged, AddressOf SettingsVertical_ValueChanged
+        For Each control As Control In New Control() {SettingsSidebarNavigation,
+            settingsSidebarPanel, GeneralButton, BranchButton, SecurityButton}
+            AddHandler control.MouseWheel, AddressOf SettingsNavigation_MouseWheel
+        Next
 
-        ' SettingsSidebarNavigation
-        ' settingsSidebarPanel
-        ' GeneralButton
-        ' BranchButton
-        ' SecurityButton
-
-        ' The size, location, parent,
-        ' Dock and Anchor properties
-        ' are not changed here.
+        For Each button As RoundedButton In {GeneralButton, BranchButton, SecurityButton}
+            button.Dock = DockStyle.None
+            button.Anchor = AnchorStyles.Top Or AnchorStyles.Left
+        Next
 
         ' ==================================
         ' BUTTON FONTS
-        ' Preserve Designer font sizes.
+        ' Use larger settings navigation text.
         ' ==================================
 
         ApplyButtonFont(GeneralButton)
@@ -593,18 +600,7 @@ Public Class SuperAdminSettings
 
         If btn Is Nothing Then Return
 
-        If GetSettingsPage(btn) =
-            _activeSettingsPage Then
-
-            Return
-
-        End If
-
-        ApplySettingsButtonStyle(
-            btn,
-            False,
-            True
-        )
+        ApplySettingsButtonStyle(btn, GetSettingsPage(btn) = _activeSettingsPage, True)
 
     End Sub
 
@@ -648,29 +644,10 @@ Public Class SuperAdminSettings
 
         If btn Is Nothing Then Return
 
-        If selected OrElse hovered Then
-
-            ' Orange selected/hover background.
-
-            btn.FillColor = _hoverFill
-
-            btn.ForeColor = Color.White
-
-            btn.BorderColor = _hoverFill
-            btn.BorderThickness = 0
-
-        Else
-
-            ' White normal background.
-
-            btn.FillColor = _normalFill
-
-            btn.ForeColor = _normalText
-
-            btn.BorderColor = Color.Transparent
-            btn.BorderThickness = 0
-
-        End If
+        btn.FillColor = If(hovered, _hoverFill, Color.Transparent)
+        btn.ForeColor = If(hovered, Color.White, _normalText)
+        btn.BorderColor = If(selected, Color.FromArgb(223, 149, 63), Color.Transparent)
+        btn.BorderThickness = If(selected, 2, 0)
 
         btn.TextAlign =
             ContentAlignment.MiddleLeft
@@ -798,18 +775,88 @@ Public Class SuperAdminSettings
     End Function
 
     ' ==========================================
-    ' MAIN RESPONSIVE WINDOW LAYOUT
-    '
-    ' Only the main layout is resized.
-    '
-    ' These are NOT manually resized:
-    '
-    ' SettingsSidebarNavigation
-    ' settingsSidebarPanel
-    ' GeneralButton
-    ' BranchButton
-    ' SecurityButton
+    ' RESPONSIVE WINDOW AND SETTINGS LAYOUT
     ' ==========================================
+
+    Private Sub UpdateSettingsNavigationLayout()
+
+        Dim availableWidth As Integer = SplitContainer1.ClientSize.Width
+        Dim preferredWidth As Integer = Math.Max(Px(160), Math.Min(Px(220), CInt(availableWidth * 0.22R)))
+        SetSplitDistanceSafe(SplitContainer1, Math.Min(preferredWidth, CInt(availableWidth * 0.45R)))
+
+        Dim inset As Integer = Px(8)
+        Dim gap As Integer = Px(6)
+        ' Match SuperAdminSidebarNavigation: size to the visible viewport
+        ' and reserve space for a vertical-only scrollbar.
+        Dim navigationLimit As Size = SplitContainer1.Panel1.ClientSize
+        SettingsSidebarNavigation.MaximumSize = New Size(Math.Max(1, navigationLimit.Width), Math.Max(1, navigationLimit.Height))
+        SettingsSidebarNavigation.Bounds = SplitContainer1.Panel1.ClientRectangle
+        Dim viewport As Size = SettingsSidebarNavigation.ClientSize
+        Dim padding As Padding = SettingsSidebarNavigation.Padding
+        Dim panelWidth As Integer = Math.Max(1,
+            viewport.Width - padding.Horizontal - _settingsVerticalOnly.Width)
+        panelWidth = Math.Min(Px(220), panelWidth)
+        settingsSidebarPanel.MaximumSize = New Size(panelWidth, 0)
+        Dim buttonWidth As Integer = Math.Max(1, panelWidth - inset * 2)
+        ' Normalize physical pixels before choosing a point size (avoid double DPI scaling).
+        Dim widthScale As Double = Math.Max(0.0R, Math.Min(1.0R,
+            (viewport.Width - Px(160)) / CDbl(Px(220) - Px(160))))
+        Dim responsiveFontSize As Single = CSng(Math.Round((8.0R + 3.0R * widthScale) * 4.0R) / 4.0R)
+        Dim top As Integer = inset
+
+        For Each button As RoundedButton In {GeneralButton, BranchButton, SecurityButton}
+            If Math.Abs(button.Font.SizeInPoints - responsiveFontSize) > 0.01F Then
+                Dim previousFont As Font = button.Font
+                Dim nextFont As New Font(_fontFamilyName, responsiveFontSize, _fontStyle, GraphicsUnit.Point)
+                button.Font = nextFont
+                _buttonFonts.Add(nextFont)
+                If _buttonFonts.Remove(previousFont) Then previousFont.Dispose()
+            End If
+            ' Measure again after scaling so labels cannot overlap the next button.
+            Dim labelSize As Size = TextRenderer.MeasureText(button.Text, button.Font,
+                New Size(Math.Max(1, buttonWidth - Px(12)), Integer.MaxValue),
+                TextFormatFlags.WordBreak Or TextFormatFlags.NoPrefix)
+            Dim buttonHeight As Integer = Math.Max(Px(30), labelSize.Height + Px(10))
+            button.MinimumSize = New Size(1, Px(25))
+            button.MaximumSize = New Size(buttonWidth, buttonHeight)
+            button.SetBounds(inset, top, buttonWidth, buttonHeight)
+            top += buttonHeight + gap
+        Next
+
+        Dim totalHeight As Integer = top - gap + inset
+        Dim viewportHeight As Integer = Math.Max(1, viewport.Height - padding.Vertical)
+        Dim maxOffset As Integer = Math.Max(0, totalHeight - viewportHeight)
+        _settingsVerticalOnly.SmallChange = Px(35)
+        _settingsVerticalOnly.LargeChange = viewportHeight
+        _settingsVerticalOnly.Maximum = Math.Max(0, totalHeight - 1)
+        _settingsVerticalOnly.Value = Math.Min(_settingsVerticalOnly.Value, maxOffset)
+        _settingsVerticalOnly.SetBounds(Math.Max(0, viewport.Width - _settingsVerticalOnly.Width),
+            0, _settingsVerticalOnly.Width, viewport.Height)
+        _settingsVerticalOnly.Visible = maxOffset > 0
+        settingsSidebarPanel.SetBounds(padding.Left,
+            padding.Top - _settingsVerticalOnly.Value, panelWidth, totalHeight)
+
+    End Sub
+
+    Private Sub SettingsVertical_ValueChanged(sender As Object, e As EventArgs)
+        settingsSidebarPanel.Top = SettingsSidebarNavigation.Padding.Top - _settingsVerticalOnly.Value
+    End Sub
+
+    Private Sub SettingsNavigation_MouseWheel(sender As Object, e As MouseEventArgs)
+        If _settingsVerticalOnly Is Nothing OrElse Not _settingsVerticalOnly.Visible OrElse e.Delta = 0 Then Return
+        Dim maxOffset As Integer = Math.Max(0,
+            _settingsVerticalOnly.Maximum - _settingsVerticalOnly.LargeChange + 1)
+        Dim steps As Integer = Math.Max(1, Math.Abs(e.Delta) \ 120)
+        Dim delta As Integer = If(e.Delta > 0, -Px(40), Px(40)) * steps
+        _settingsVerticalOnly.Value = Math.Max(0, Math.Min(maxOffset, _settingsVerticalOnly.Value + delta))
+    End Sub
+
+    Private Sub SettingsNavigation_SizeChanged(sender As Object, e As EventArgs) _
+        Handles SplitContainer1.SizeChanged, SettingsSidebarNavigation.SizeChanged
+
+        UpdateResponsiveLayout()
+
+    End Sub
 
     Private Sub UpdateResponsiveLayout()
 
@@ -870,12 +917,17 @@ Public Class SuperAdminSettings
             ' ==================================
             ' SETTINGS NAVIGATION
             '
-            ' NO RESIZING HERE.
+            ' Size the nested settings sidebar after the main layout.
             ' ==================================
+
+            UpdateSettingsNavigationLayout()
 
         Finally
 
             Me.ResumeLayout(True)
+
+            ' Parent docking has settled after maximize or restore.
+            UpdateSettingsNavigationLayout()
 
             _busy = False
 
@@ -893,6 +945,14 @@ Public Class SuperAdminSettings
     ) Handles MyBase.Resize
 
         UpdateResponsiveLayout()
+        ' Recheck after all nested docked containers finish processing Resize.
+        If _ready AndAlso IsHandleCreated AndAlso Not _settingsLayoutPending Then
+            _settingsLayoutPending = True
+            BeginInvoke(New Action(Sub()
+                                       _settingsLayoutPending = False
+                                       If Not IsDisposed Then UpdateResponsiveLayout()
+                                   End Sub))
+        End If
 
     End Sub
 

@@ -22,6 +22,8 @@ Partial Class RiderSidebarNavigation
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(RiderSidebarNavigation))
+        k4jLogoPicture = New PictureBox()
         k4jTitle = New Label()
         branchLabel = New Label()
         userPlaceholder = New RoundedTitlePanel()
@@ -146,9 +148,10 @@ Partial Class RiderSidebarNavigation
         signOutButton.FlatStyle = FlatStyle.Flat
         signOutButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         signOutButton.ForeColor = Color.FromArgb(122, 154, 191)
-        signOutButton.IconFileName = "dashboard.png"
-        signOutButton.IconHeight = 60
-        signOutButton.IconWidth = 60
+        signOutButton.Image = CType(resources.GetObject("signOutButton.Image"), Image)
+        signOutButton.CenterIconAndText = False
+        signOutButton.IconHeight = 18
+        signOutButton.IconWidth = 18
         signOutButton.ImageAlign = ContentAlignment.MiddleLeft
         signOutButton.Location = New Point(21, 674)
         signOutButton.MinimumSize = New Size(50, 25)
@@ -179,9 +182,10 @@ Partial Class RiderSidebarNavigation
         deliveryHistoryButton.FlatStyle = FlatStyle.Flat
         deliveryHistoryButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         deliveryHistoryButton.ForeColor = Color.FromArgb(122, 154, 191)
-        deliveryHistoryButton.IconFileName = "history.png"
-        deliveryHistoryButton.IconHeight = 60
-        deliveryHistoryButton.IconWidth = 60
+        deliveryHistoryButton.Image = CType(resources.GetObject("deliveryHistoryButton.Image"), Image)
+        deliveryHistoryButton.CenterIconAndText = False
+        deliveryHistoryButton.IconHeight = 18
+        deliveryHistoryButton.IconWidth = 18
         deliveryHistoryButton.ImageAlign = ContentAlignment.MiddleLeft
         deliveryHistoryButton.Location = New Point(21, 238)
         deliveryHistoryButton.MinimumSize = New Size(50, 25)
@@ -208,9 +212,10 @@ Partial Class RiderSidebarNavigation
         myDeliveriesButton.FlatStyle = FlatStyle.Flat
         myDeliveriesButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         myDeliveriesButton.ForeColor = Color.FromArgb(122, 154, 191)
-        myDeliveriesButton.IconFileName = "delivery-truck.png"
-        myDeliveriesButton.IconHeight = 60
-        myDeliveriesButton.IconWidth = 60
+        myDeliveriesButton.Image = CType(resources.GetObject("myDeliveriesButton.Image"), Image)
+        myDeliveriesButton.CenterIconAndText = False
+        myDeliveriesButton.IconHeight = 18
+        myDeliveriesButton.IconWidth = 18
         myDeliveriesButton.ImageAlign = ContentAlignment.MiddleLeft
         myDeliveriesButton.Location = New Point(21, 207)
         myDeliveriesButton.MinimumSize = New Size(50, 25)
@@ -274,9 +279,10 @@ Partial Class RiderSidebarNavigation
         dashboardButton.FlatStyle = FlatStyle.Flat
         dashboardButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         dashboardButton.ForeColor = Color.FromArgb(122, 154, 191)
-        dashboardButton.IconFileName = "dashboard.png"
-        dashboardButton.IconHeight = 60
-        dashboardButton.IconWidth = 60
+        dashboardButton.Image = CType(resources.GetObject("dashboardButton.Image"), Image)
+        dashboardButton.CenterIconAndText = False
+        dashboardButton.IconHeight = 18
+        dashboardButton.IconWidth = 18
         dashboardButton.ImageAlign = ContentAlignment.MiddleLeft
         dashboardButton.Location = New Point(21, 165)
         dashboardButton.MinimumSize = New Size(50, 25)
@@ -307,6 +313,14 @@ Partial Class RiderSidebarNavigation
         userInitialsPlaceholder.PerformLayout()
         userRolePlaceholder.ResumeLayout(False)
         userRolePlaceholder.PerformLayout()
+        k4jLogoPicture.Name = "k4jLogoPicture"
+        k4jLogoPicture.Image = CType(resources.GetObject("k4jLogoPicture.Image"), Image)
+        k4jLogoPicture.SizeMode = PictureBoxSizeMode.Zoom
+        k4jLogoPicture.BackColor = Color.Transparent
+        k4jLogoPicture.Location = New Point(15, 8)
+        k4jLogoPicture.Size = New Size(60, 60)
+        k4jLogoPicture.TabStop = False
+        Controls.Add(k4jLogoPicture)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -326,4 +340,5 @@ Partial Class RiderSidebarNavigation
 
     Friend WithEvents overviewCateg As SpacedLabel
     Friend WithEvents dashboardButton As RoundedButton
+    Friend WithEvents k4jLogoPicture As PictureBox
 End Class

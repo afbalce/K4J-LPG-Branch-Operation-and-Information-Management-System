@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AdminSidebarNaviagtion
     Inherits System.Windows.Forms.UserControl
 
@@ -22,6 +22,8 @@ Partial Class AdminSidebarNaviagtion
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(AdminSidebarNaviagtion))
+        k4jLogoPicture = New PictureBox()
         k4jTitle = New Label()
         branchLabel = New Label()
         userPlaceholder = New RoundedTitlePanel()
@@ -158,9 +160,10 @@ Partial Class AdminSidebarNaviagtion
         signOutButton.FlatStyle = FlatStyle.Flat
         signOutButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         signOutButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        signOutButton.IconFileName = "dashboard.png"
-        signOutButton.IconHeight = 60
-        signOutButton.IconWidth = 60
+        signOutButton.Image = CType(resources.GetObject("signOutButton.Image"), Image)
+        signOutButton.CenterIconAndText = False
+        signOutButton.IconHeight = 18
+        signOutButton.IconWidth = 18
         signOutButton.ImageAlign = ContentAlignment.MiddleLeft
         signOutButton.Location = New Point(21, 674)
         signOutButton.MinimumSize = New Size(50, 25)
@@ -196,9 +199,10 @@ Partial Class AdminSidebarNaviagtion
         closingChecklistButton.FlatStyle = FlatStyle.Flat
         closingChecklistButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         closingChecklistButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        closingChecklistButton.IconFileName = "dashboard.png"
-        closingChecklistButton.IconHeight = 60
-        closingChecklistButton.IconWidth = 60
+        closingChecklistButton.Image = CType(resources.GetObject("closingChecklistButton.Image"), Image)
+        closingChecklistButton.CenterIconAndText = False
+        closingChecklistButton.IconHeight = 18
+        closingChecklistButton.IconWidth = 18
         closingChecklistButton.ImageAlign = ContentAlignment.MiddleLeft
         closingChecklistButton.Location = New Point(21, 484)
         closingChecklistButton.MinimumSize = New Size(50, 25)
@@ -221,9 +225,10 @@ Partial Class AdminSidebarNaviagtion
         eodButton.FlatStyle = FlatStyle.Flat
         eodButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         eodButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        eodButton.IconFileName = "dashboard.png"
-        eodButton.IconHeight = 60
-        eodButton.IconWidth = 60
+        eodButton.Image = CType(resources.GetObject("eodButton.Image"), Image)
+        eodButton.CenterIconAndText = False
+        eodButton.IconHeight = 18
+        eodButton.IconWidth = 18
         eodButton.ImageAlign = ContentAlignment.MiddleLeft
         eodButton.Location = New Point(21, 515)
         eodButton.MinimumSize = New Size(50, 25)
@@ -246,9 +251,10 @@ Partial Class AdminSidebarNaviagtion
         createOrderButton.FlatStyle = FlatStyle.Flat
         createOrderButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         createOrderButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        createOrderButton.IconFileName = "dashboard.png"
-        createOrderButton.IconHeight = 60
-        createOrderButton.IconWidth = 60
+        createOrderButton.Image = CType(resources.GetObject("createOrderButton.Image"), Image)
+        createOrderButton.CenterIconAndText = False
+        createOrderButton.IconHeight = 18
+        createOrderButton.IconWidth = 18
         createOrderButton.ImageAlign = ContentAlignment.MiddleLeft
         createOrderButton.Location = New Point(21, 319)
         createOrderButton.MinimumSize = New Size(50, 25)
@@ -271,9 +277,10 @@ Partial Class AdminSidebarNaviagtion
         customersButton.FlatStyle = FlatStyle.Flat
         customersButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         customersButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        customersButton.IconFileName = "dashboard.png"
-        customersButton.IconHeight = 60
-        customersButton.IconWidth = 60
+        customersButton.Image = CType(resources.GetObject("customersButton.Image"), Image)
+        customersButton.CenterIconAndText = False
+        customersButton.IconHeight = 18
+        customersButton.IconWidth = 18
         customersButton.ImageAlign = ContentAlignment.MiddleLeft
         customersButton.Location = New Point(21, 206)
         customersButton.MinimumSize = New Size(50, 25)
@@ -296,9 +303,10 @@ Partial Class AdminSidebarNaviagtion
         globalInventoryButton.FlatStyle = FlatStyle.Flat
         globalInventoryButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         globalInventoryButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        globalInventoryButton.IconFileName = "dashboard.png"
-        globalInventoryButton.IconHeight = 60
-        globalInventoryButton.IconWidth = 60
+        globalInventoryButton.Image = CType(resources.GetObject("globalInventoryButton.Image"), Image)
+        globalInventoryButton.CenterIconAndText = False
+        globalInventoryButton.IconHeight = 18
+        globalInventoryButton.IconWidth = 18
         globalInventoryButton.ImageAlign = ContentAlignment.MiddleLeft
         globalInventoryButton.Location = New Point(21, 278)
         globalInventoryButton.MinimumSize = New Size(50, 25)
@@ -321,9 +329,10 @@ Partial Class AdminSidebarNaviagtion
         productsButton.FlatStyle = FlatStyle.Flat
         productsButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         productsButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        productsButton.IconFileName = "dashboard.png"
-        productsButton.IconHeight = 60
-        productsButton.IconWidth = 60
+        productsButton.Image = CType(resources.GetObject("productsButton.Image"), Image)
+        productsButton.CenterIconAndText = False
+        productsButton.IconHeight = 18
+        productsButton.IconWidth = 18
         productsButton.ImageAlign = ContentAlignment.MiddleLeft
         productsButton.Location = New Point(21, 247)
         productsButton.MinimumSize = New Size(50, 25)
@@ -346,9 +355,10 @@ Partial Class AdminSidebarNaviagtion
         dashboardButton.FlatStyle = FlatStyle.Flat
         dashboardButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         dashboardButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        dashboardButton.IconFileName = "dashboard.png"
-        dashboardButton.IconHeight = 60
-        dashboardButton.IconWidth = 60
+        dashboardButton.Image = CType(resources.GetObject("dashboardButton.Image"), Image)
+        dashboardButton.CenterIconAndText = False
+        dashboardButton.IconHeight = 18
+        dashboardButton.IconWidth = 18
         dashboardButton.ImageAlign = ContentAlignment.MiddleLeft
         dashboardButton.Location = New Point(21, 165)
         dashboardButton.MinimumSize = New Size(50, 25)
@@ -441,9 +451,10 @@ Partial Class AdminSidebarNaviagtion
         assignRiderButton.FlatStyle = FlatStyle.Flat
         assignRiderButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         assignRiderButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        assignRiderButton.IconFileName = "dashboard.png"
-        assignRiderButton.IconHeight = 60
-        assignRiderButton.IconWidth = 60
+        assignRiderButton.Image = CType(resources.GetObject("assignRiderButton.Image"), Image)
+        assignRiderButton.CenterIconAndText = False
+        assignRiderButton.IconHeight = 18
+        assignRiderButton.IconWidth = 18
         assignRiderButton.ImageAlign = ContentAlignment.MiddleLeft
         assignRiderButton.Location = New Point(21, 350)
         assignRiderButton.MinimumSize = New Size(50, 25)
@@ -466,9 +477,10 @@ Partial Class AdminSidebarNaviagtion
         deliveriesButton.FlatStyle = FlatStyle.Flat
         deliveriesButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         deliveriesButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        deliveriesButton.IconFileName = "dashboard.png"
-        deliveriesButton.IconHeight = 60
-        deliveriesButton.IconWidth = 60
+        deliveriesButton.Image = CType(resources.GetObject("deliveriesButton.Image"), Image)
+        deliveriesButton.CenterIconAndText = False
+        deliveriesButton.IconHeight = 18
+        deliveriesButton.IconWidth = 18
         deliveriesButton.ImageAlign = ContentAlignment.MiddleLeft
         deliveriesButton.Location = New Point(21, 381)
         deliveriesButton.MinimumSize = New Size(50, 25)
@@ -491,9 +503,10 @@ Partial Class AdminSidebarNaviagtion
         debtButton.FlatStyle = FlatStyle.Flat
         debtButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         debtButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        debtButton.IconFileName = "dashboard.png"
-        debtButton.IconHeight = 60
-        debtButton.IconWidth = 60
+        debtButton.Image = CType(resources.GetObject("debtButton.Image"), Image)
+        debtButton.CenterIconAndText = False
+        debtButton.IconHeight = 18
+        debtButton.IconWidth = 18
         debtButton.ImageAlign = ContentAlignment.MiddleLeft
         debtButton.Location = New Point(21, 412)
         debtButton.MinimumSize = New Size(50, 25)
@@ -516,9 +529,10 @@ Partial Class AdminSidebarNaviagtion
         openingChecklistButton.FlatStyle = FlatStyle.Flat
         openingChecklistButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
         openingChecklistButton.ForeColor = Color.FromArgb(CByte(122), CByte(154), CByte(191))
-        openingChecklistButton.IconFileName = "dashboard.png"
-        openingChecklistButton.IconHeight = 60
-        openingChecklistButton.IconWidth = 60
+        openingChecklistButton.Image = CType(resources.GetObject("openingChecklistButton.Image"), Image)
+        openingChecklistButton.CenterIconAndText = False
+        openingChecklistButton.IconHeight = 18
+        openingChecklistButton.IconWidth = 18
         openingChecklistButton.ImageAlign = ContentAlignment.MiddleLeft
         openingChecklistButton.Location = New Point(20, 453)
         openingChecklistButton.MinimumSize = New Size(50, 25)
@@ -564,6 +578,14 @@ Partial Class AdminSidebarNaviagtion
         userInitialsPlaceholder.PerformLayout()
         userRolePlaceholder.ResumeLayout(False)
         userRolePlaceholder.PerformLayout()
+        k4jLogoPicture.Name = "k4jLogoPicture"
+        k4jLogoPicture.Image = CType(resources.GetObject("k4jLogoPicture.Image"), Image)
+        k4jLogoPicture.SizeMode = PictureBoxSizeMode.Zoom
+        k4jLogoPicture.BackColor = Color.Transparent
+        k4jLogoPicture.Location = New Point(15, 8)
+        k4jLogoPicture.Size = New Size(60, 60)
+        k4jLogoPicture.TabStop = False
+        Controls.Add(k4jLogoPicture)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -595,4 +617,5 @@ Partial Class AdminSidebarNaviagtion
     Friend WithEvents debtButton As RoundedButton
     Friend WithEvents openingChecklistButton As RoundedButton
 
+    Friend WithEvents k4jLogoPicture As PictureBox
 End Class
