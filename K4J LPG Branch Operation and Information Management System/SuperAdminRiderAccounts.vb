@@ -11,8 +11,6 @@ Public Class SuperAdminRiderAccounts
 
     Private Const StartMaximized As Boolean = False
 
-    Private Const InitialWidthRatio As Double = 0.92R
-    Private Const InitialHeightRatio As Double = 0.92R
 
     Private Const SidebarWidthRatio As Double = 0.18R
 
@@ -33,6 +31,9 @@ Public Class SuperAdminRiderAccounts
     Private _rightHost As Panel
     Private _header As HeaderBar
     Private _systemHeading As SystemHeading
+    Private _addRiderAction As RoundedButton
+    Private _addRiderFont As Font
+    Private _addRiderPage As SuperAdminAddRiderAccount
 
     ' ==========================================
     ' STATE
@@ -89,59 +90,7 @@ Public Class SuperAdminRiderAccounts
             ' GET SCREEN WORKING AREA
             ' ==================================
 
-            Dim work As Rectangle =
-                Screen.FromControl(Me).WorkingArea
-
-            Dim minWidth As Integer =
-                Math.Min(work.Width, Px(520))
-
-            Dim minHeight As Integer =
-                Math.Min(work.Height, Px(360))
-
-            Me.MinimumSize =
-                New Size(minWidth, minHeight)
-
-            ' ==================================
-            ' INITIAL WINDOW DIMENSIONS
-            ' ==================================
-
-            Me.WindowState =
-                FormWindowState.Normal
-
-            Me.StartPosition =
-                FormStartPosition.Manual
-
-            Dim startWidth As Integer =
-                Math.Min(
-                    work.Width,
-                    Math.Max(
-                        minWidth,
-                        CInt(
-                            work.Width * InitialWidthRatio
-                        )
-                    )
-                )
-
-            Dim startHeight As Integer =
-                Math.Min(
-                    work.Height,
-                    Math.Max(
-                        minHeight,
-                        CInt(
-                            work.Height * InitialHeightRatio
-                        )
-                    )
-                )
-
-            Me.Size = New Size(
-                startWidth,
-                startHeight
-            )
-
-            Me.Location = New Point(
-                work.Left + (work.Width - Me.Width) \ 2,
-                work.Top + (work.Height - Me.Height) \ 2
-            )
+            WindowSizing.ApplyStartingSize(Me)
 
             ' ==================================
             ' SETUP SIDEBAR AND HEADER
@@ -150,6 +99,7 @@ Public Class SuperAdminRiderAccounts
             SetupSidebar()
             SetupHeader()
             SetupSystemHeading()
+            SetupAddRiderAction()
 
             If _sidebar IsNot Nothing Then
 
@@ -465,6 +415,96 @@ Public Class SuperAdminRiderAccounts
     ' SYSTEM HEADING BELOW HEADERBAR
     ' ==========================================
 
+    Private Sub SetupAddRiderAction()
+        ' Reuse the Designer button when present; otherwise create it only at runtime.
+        Dim existing = Controls.Find("addRiderButton", True)
+        If existing.Length > 0 Then _addRiderAction = TryCast(existing(0), RoundedButton)
+        If _addRiderAction Is Nothing Then
+            _addRiderAction = New RoundedButton With {
+                .Name = "addRiderButton",
+                .FillColor = Color.FromArgb(242, 106, 0),
+                .ForeColor = Color.White,
+                .BorderThickness = 0,
+                .CornerRadius = 10
+            }
+            _systemHeading.Controls.Add(_addRiderAction)
+        End If
+        _addRiderAction.SetIconBeforeText("plus.png", "Add Rider")
+        RemoveHandler _addRiderAction.Click, AddressOf OpenAddRiderAccount
+        AddHandler _addRiderAction.Click, AddressOf OpenAddRiderAccount
+        _addRiderAction.BringToFront()
+        AddHandler Disposed, Sub()
+                                 If _addRiderFont IsNot Nothing Then _addRiderFont.Dispose()
+                             End Sub
+    End Sub
+
+    Private Sub OpenAddRiderAccount(sender As Object, e As EventArgs)
+        If _addRiderPage IsNot Nothing AndAlso Not _addRiderPage.IsDisposed Then
+            Using transition As New PanelTransition(Me)
+                _addRiderPage.Show()
+                _addRiderPage.BringToFront()
+            End Using
+            Return
+        End If
+        Dim page As New SuperAdminAddRiderAccount With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None,
+            .Dock = DockStyle.Fill,
+            .ShowInTaskbar = False}
+        _addRiderPage = page
+        AddHandler page.NavigateRequested,
+            Sub(pageKey)
+                If pageKey = "Rider Accounts" Then
+                    Using transition As New PanelTransition(Me)
+                        page.Hide()
+                        _addRiderAction.Focus()
+                    End Using
+                End If
+            End Sub
+        AddHandler page.FormClosed,
+            Sub()
+                Controls.Remove(page)
+                _addRiderPage = Nothing
+                _addRiderAction.Focus()
+            End Sub
+        Using transition As New PanelTransition(Me)
+            Controls.Add(page)
+            page.Show()
+            page.BringToFront()
+        End Using
+    End Sub
+
+    Private Sub LayoutAddRiderAction()
+        If _addRiderAction Is Nothing Then Return
+        Dim scale = Math.Clamp(_systemHeading.Width / CDbl(Px(924)), 0.85R, 1.1R)
+        Dim points = CSng(Math.Clamp(10.0R * scale, 9.0R, 11.0R))
+        If _addRiderFont Is Nothing OrElse Math.Abs(_addRiderFont.SizeInPoints - points) > 0.05F Then
+            Dim previous = _addRiderFont
+            _addRiderFont = New Font("Segoe UI", points, FontStyle.Bold)
+            _addRiderAction.Font = _addRiderFont
+            If previous IsNot Nothing Then previous.Dispose()
+        End If
+        Dim icon = Px(CInt(16 * scale))
+        _addRiderAction.IconWidth = icon
+        _addRiderAction.IconHeight = icon
+        _addRiderAction.IconTextSpacing = Px(8)
+        Dim width = Math.Max(Px(CInt(138 * scale)),
+                             TextRenderer.MeasureText("Add Rider", _addRiderFont).Width + icon + Px(32))
+        Dim height = Math.Max(Px(CInt(34 * scale)), _addRiderFont.Height + Px(14))
+        Dim parent = _addRiderAction.Parent
+        _addRiderAction.SetBounds(Math.Max(0, parent.ClientSize.Width - Px(18) - width),
+                                 Math.Max(0, (parent.ClientSize.Height - height) \ 2), width, height)
+        If parent Is _systemHeading Then
+            For Each child As Control In _systemHeading.Controls
+                Dim label = TryCast(child, Label)
+                If label Is Nothing Then Continue For
+                label.AutoEllipsis = True
+                label.Width = Math.Max(1, _addRiderAction.Left - Px(12) - label.Left)
+            Next
+        End If
+        _addRiderAction.BringToFront()
+    End Sub
+
     Private Sub SetupSystemHeading()
 
         If _rightHost Is Nothing Then Return
@@ -675,6 +715,7 @@ Public Class SuperAdminRiderAccounts
                 _systemHeading.SetBounds(0, headingTop,
                     headingWidth, _systemHeading.Height)
                 _systemHeading.RefreshHeadingLayout()
+                LayoutAddRiderAction()
 
             End If
 
@@ -757,4 +798,6 @@ Public Class SuperAdminRiderAccounts
     End Property
 
 End Class
+
+
 

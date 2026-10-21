@@ -11,6 +11,30 @@ Public Class RoundedButton
 
     ' APPEARANCE
     Private _cornerRadius As Integer = 15
+    Private _horizontalContentInset As Integer = 10
+    Private _drawBackArrow As Boolean
+
+    <Category("Rounded Appearance"), DefaultValue(False)>
+    Public Property DrawBackArrow As Boolean
+        Get
+            Return _drawBackArrow
+        End Get
+        Set(value As Boolean)
+            _drawBackArrow = value
+            Invalidate()
+        End Set
+    End Property
+
+    <Category("Rounded Appearance"), DefaultValue(10)>
+    Public Property HorizontalContentInset As Integer
+        Get
+            Return _horizontalContentInset
+        End Get
+        Set(value As Integer)
+            _horizontalContentInset = Math.Max(0, value)
+            Invalidate()
+        End Set
+    End Property
     Private _borderColor As Color = Color.FromArgb(223, 149, 63)
     Private _borderThickness As Integer = 2
     Private _fillColor As Color = Color.FromArgb(245, 239, 232)
@@ -613,10 +637,27 @@ Public Class RoundedButton
 
         ' CONTENT AREA
 
+        If DrawBackArrow Then
+            ' Draw geometry instead of a font glyph so its visible bounds are centered.
+            Dim cx = (w - 1) / 2.0F
+            Dim cy = (h - 1) / 2.0F
+            Dim halfWidth = Math.Min(w, h) * 0.17F
+            Dim halfHeight = halfWidth * 0.7F
+            Using arrowPen As New Pen(If(Enabled, ForeColor, SystemColors.GrayText),
+                                      Math.Max(1.2F, DeviceDpi / 96.0F))
+                arrowPen.StartCap = LineCap.Round
+                arrowPen.EndCap = LineCap.Round
+                g.DrawLine(arrowPen, cx - halfWidth, cy, cx + halfWidth, cy)
+                g.DrawLines(arrowPen, {New PointF(cx, cy - halfHeight),
+                    New PointF(cx - halfWidth, cy), New PointF(cx, cy + halfHeight)})
+            End Using
+            Return
+        End If
+
         Dim content As New Rectangle(
-            10 + Me.Padding.Left,
+            _horizontalContentInset + Me.Padding.Left,
             3 + Me.Padding.Top,
-            w - 20 - Me.Padding.Horizontal,
+            w - 2 * _horizontalContentInset - Me.Padding.Horizontal,
             h - 6 - Me.Padding.Vertical
         )
 

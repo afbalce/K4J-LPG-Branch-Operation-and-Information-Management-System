@@ -11,8 +11,6 @@ Public Class SuperAdminAdminAccounts
 
     Private Const StartMaximized As Boolean = False
 
-    Private Const InitialWidthRatio As Double = 0.92R
-    Private Const InitialHeightRatio As Double = 0.92R
 
     Private Const SidebarWidthRatio As Double = 0.18R
 
@@ -35,6 +33,7 @@ Public Class SuperAdminAdminAccounts
     Private _systemHeading As SystemHeading
     Private _addAdminAction As RoundedButton
     Private _addAdminFont As Font
+    Private _addAdminPage As SuperAdminAddAdminAccount
 
     ' ==========================================
     ' STATE
@@ -91,59 +90,7 @@ Public Class SuperAdminAdminAccounts
             ' GET SCREEN WORKING AREA
             ' ==================================
 
-            Dim work As Rectangle =
-                Screen.FromControl(Me).WorkingArea
-
-            Dim minWidth As Integer =
-                Math.Min(work.Width, Px(520))
-
-            Dim minHeight As Integer =
-                Math.Min(work.Height, Px(360))
-
-            Me.MinimumSize =
-                New Size(minWidth, minHeight)
-
-            ' ==================================
-            ' INITIAL WINDOW DIMENSIONS
-            ' ==================================
-
-            Me.WindowState =
-                FormWindowState.Normal
-
-            Me.StartPosition =
-                FormStartPosition.Manual
-
-            Dim startWidth As Integer =
-                Math.Min(
-                    work.Width,
-                    Math.Max(
-                        minWidth,
-                        CInt(
-                            work.Width * InitialWidthRatio
-                        )
-                    )
-                )
-
-            Dim startHeight As Integer =
-                Math.Min(
-                    work.Height,
-                    Math.Max(
-                        minHeight,
-                        CInt(
-                            work.Height * InitialHeightRatio
-                        )
-                    )
-                )
-
-            Me.Size = New Size(
-                startWidth,
-                startHeight
-            )
-
-            Me.Location = New Point(
-                work.Left + (work.Width - Me.Width) \ 2,
-                work.Top + (work.Height - Me.Height) \ 2
-            )
+            WindowSizing.ApplyStartingSize(Me)
 
             ' ==================================
             ' SETUP SIDEBAR AND HEADER
@@ -334,10 +281,48 @@ Public Class SuperAdminAdminAccounts
             _systemHeading.Controls.Add(_addAdminAction)
         End If
         _addAdminAction.SetIconBeforeText("plus.png", "Add Admin")
+        RemoveHandler _addAdminAction.Click, AddressOf OpenAddAdminAccount
+        AddHandler _addAdminAction.Click, AddressOf OpenAddAdminAccount
         _addAdminAction.BringToFront()
         AddHandler Disposed, Sub()
                                  If _addAdminFont IsNot Nothing Then _addAdminFont.Dispose()
                              End Sub
+    End Sub
+
+    Private Sub OpenAddAdminAccount(sender As Object, e As EventArgs)
+        If _addAdminPage IsNot Nothing AndAlso Not _addAdminPage.IsDisposed Then
+            Using transition As New PanelTransition(Me)
+                _addAdminPage.Show()
+                _addAdminPage.BringToFront()
+            End Using
+            Return
+        End If
+        Dim page As New SuperAdminAddAdminAccount With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None,
+            .Dock = DockStyle.Fill,
+            .ShowInTaskbar = False}
+        _addAdminPage = page
+        AddHandler page.NavigateRequested,
+            Sub(pageKey)
+                If pageKey = "Admin Accounts" Then
+                    Using transition As New PanelTransition(Me)
+                        page.Hide()
+                        _addAdminAction.Focus()
+                    End Using
+                End If
+            End Sub
+        AddHandler page.FormClosed,
+            Sub()
+                Controls.Remove(page)
+                _addAdminPage = Nothing
+                _addAdminAction.Focus()
+            End Sub
+        Using transition As New PanelTransition(Me)
+            Controls.Add(page)
+            page.Show()
+            page.BringToFront()
+        End Using
     End Sub
 
     Private Sub LayoutAddAdminAction()
@@ -429,7 +414,7 @@ Public Class SuperAdminAdminAccounts
             ' Keep the cards aligned with SystemHeading's 18-pixel logical inset.
             AdminAccountsCards1.Dock = DockStyle.Fill
             AdminAccountsCards1.Padding = New Padding(Px(18), Px(6), Px(18), Px(6))
-            SetSectionSize(mainContents, Px(120))
+            SetSectionSize(mainContents, Px(104))
         Finally
             ResumeLayout(True)
             _busy = False
@@ -498,5 +483,7 @@ Public Class SuperAdminAdminAccounts
     End Property
 
 End Class
+
+
 
 

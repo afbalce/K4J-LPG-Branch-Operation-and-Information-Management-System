@@ -1,4 +1,4 @@
-﻿
+
 Imports System
 Imports System.Collections.Generic
 Imports System.Drawing
@@ -108,39 +108,7 @@ Public Class LoginForm
 
         BOPLabel.BringToFront()
 
-        Dim area As Rectangle =
-            Screen.FromControl(Me).WorkingArea
-
-        Me.MaximumSize = Size.Empty
-
-        Me.MinimumSize = New Size(
-            Math.Min(
-                area.Width,
-                Math.Min(
-                    900,
-                    Math.Max(620, CInt(area.Width * 0.62))
-                )
-            ),
-            Math.Min(
-                area.Height,
-                Math.Min(
-                    650,
-                    Math.Max(480, CInt(area.Height * 0.62))
-                )
-            )
-        )
-
-        Me.StartPosition = FormStartPosition.Manual
-
-        Me.Size = New Size(
-            CInt(area.Width * 0.92),
-            CInt(area.Height * 0.92)
-        )
-
-        Me.Location = New Point(
-            area.Left + (area.Width - Me.Width) \ 2,
-            area.Top + (area.Height - Me.Height) \ 2
-        )
+        WindowSizing.ApplyStartingSize(Me)
 
         layoutReady = True
 
@@ -1960,3 +1928,4 @@ Public Class LoginForm
     End Class
 
 End Class
+

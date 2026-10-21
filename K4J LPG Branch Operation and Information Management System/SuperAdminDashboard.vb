@@ -1,4 +1,4 @@
-﻿
+
 Imports System
 Imports System.Drawing
 Imports System.Windows.Forms
@@ -11,8 +11,6 @@ Public Class SuperAdminDashboard
 
     Private Const StartMaximized As Boolean = False
 
-    Private Const InitialWidthRatio As Double = 0.92
-    Private Const InitialHeightRatio As Double = 0.92
 
     Private Const SidebarWidthRatio As Double = 0.18
 
@@ -88,69 +86,7 @@ Public Class SuperAdminDashboard
             ' GET SCREEN WORKING AREA
             ' ==================================
 
-            Dim area As Rectangle =
-                Screen.FromControl(Me).WorkingArea
-
-            ' ==================================
-            ' RESPONSIVE MINIMUM WINDOW SIZE
-            ' ==================================
-
-            Dim minimumWidth As Integer =
-                Math.Min(
-                    area.Width,
-                    Px(520)
-                )
-
-            Dim minimumHeight As Integer =
-                Math.Min(
-                    area.Height,
-                    Px(360)
-                )
-
-            Me.MinimumSize = New Size(
-                minimumWidth,
-                minimumHeight
-            )
-
-            ' ==================================
-            ' INITIAL WINDOW SIZE
-            ' ==================================
-
-            Me.WindowState = FormWindowState.Normal
-
-            Dim initialWidth As Integer =
-                Math.Min(
-                    area.Width,
-                    Math.Max(
-                        minimumWidth,
-                        CInt(area.Width * InitialWidthRatio)
-                    )
-                )
-
-            Dim initialHeight As Integer =
-                Math.Min(
-                    area.Height,
-                    Math.Max(
-                        minimumHeight,
-                        CInt(area.Height * InitialHeightRatio)
-                    )
-                )
-
-            Me.StartPosition = FormStartPosition.Manual
-
-            Me.Size = New Size(
-                initialWidth,
-                initialHeight
-            )
-
-            ' ==================================
-            ' CENTER THE WINDOW
-            ' ==================================
-
-            Me.Location = New Point(
-                area.Left + (area.Width - Me.Width) \ 2,
-                area.Top + (area.Height - Me.Height) \ 2
-            )
+            WindowSizing.ApplyStartingSize(Me)
 
             ' ==================================
             ' SETUP SIDEBAR
@@ -565,3 +501,4 @@ Public Class SuperAdminDashboard
     End Property
 
 End Class
+

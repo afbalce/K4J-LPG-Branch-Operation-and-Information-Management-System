@@ -28,6 +28,7 @@ Partial Class SuperAdminRiderAccounts
         HeaderBar1 = New HeaderBar()
         mainContentHolder = New SplitContainer()
         SystemHeading1 = New SystemHeading()
+        addRiderButton = New RoundedButton()
         CType(RiderAccountsMainContainer, ComponentModel.ISupportInitialize).BeginInit()
         RiderAccountsMainContainer.Panel1.SuspendLayout()
         RiderAccountsMainContainer.Panel2.SuspendLayout()
@@ -121,6 +122,22 @@ Partial Class SuperAdminRiderAccounts
         SystemHeading1.Name = "SystemHeading1"
         SystemHeading1.Size = New Size(924, 82)
         SystemHeading1.TabIndex = 0
+        SystemHeading1.Controls.Add(addRiderButton)
+        addRiderButton.Name = "addRiderButton"
+        addRiderButton.Text = "Add Rider"
+        addRiderButton.FillColor = Color.FromArgb(232, 101, 10)
+        addRiderButton.ForeColor = Color.White
+        addRiderButton.BorderThickness = 0
+        addRiderButton.CornerRadius = 10
+        addRiderButton.IconFileName = "plus.png"
+        addRiderButton.IconWidth = 16
+        addRiderButton.IconHeight = 16
+        addRiderButton.IconTextSpacing = 8
+        addRiderButton.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        addRiderButton.Size = New Size(160, 34)
+        addRiderButton.Location = New Point(746, 24)
+        addRiderButton.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        addRiderButton.TabIndex = 1
         ' 
         ' SuperAdminRiderAccounts
         ' 
@@ -150,5 +167,6 @@ Partial Class SuperAdminRiderAccounts
     Friend WithEvents HeaderBar1 As HeaderBar
     Friend WithEvents mainContentHolder As SplitContainer
     Friend WithEvents SystemHeading1 As SystemHeading
+    Friend WithEvents addRiderButton As RoundedButton
 End Class
 

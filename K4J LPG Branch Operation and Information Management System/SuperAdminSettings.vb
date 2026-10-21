@@ -13,8 +13,6 @@ Public Class SuperAdminSettings
 
     Private Const StartMaximized As Boolean = False
 
-    Private Const InitialWidthRatio As Double = 0.92R
-    Private Const InitialHeightRatio As Double = 0.92R
 
     Private Const SidebarWidthRatio As Double = 0.18R
 
@@ -201,57 +199,7 @@ Public Class SuperAdminSettings
             ' SCREEN WORKING AREA
             ' ==================================
 
-            Dim work As Rectangle =
-                Screen.FromControl(Me).WorkingArea
-
-            Dim minWidth As Integer =
-                Math.Min(work.Width, Px(720))
-
-            Dim minHeight As Integer =
-                Math.Min(work.Height, Px(480))
-
-            Me.MinimumSize =
-                New Size(minWidth, minHeight)
-
-            ' ==================================
-            ' INITIAL WINDOW SIZE
-            ' ==================================
-
-            Me.WindowState =
-                FormWindowState.Normal
-
-            Me.StartPosition =
-                FormStartPosition.Manual
-
-            Dim startWidth As Integer =
-                Math.Min(
-                    work.Width,
-                    Math.Max(
-                        minWidth,
-                        CInt(
-                            work.Width * InitialWidthRatio
-                        )
-                    )
-                )
-
-            Dim startHeight As Integer =
-                Math.Min(
-                    work.Height,
-                    Math.Max(
-                        minHeight,
-                        CInt(
-                            work.Height * InitialHeightRatio
-                        )
-                    )
-                )
-
-            Me.Size =
-                New Size(startWidth, startHeight)
-
-            Me.Location = New Point(
-                work.Left + (work.Width - Me.Width) \ 2,
-                work.Top + (work.Height - Me.Height) \ 2
-            )
+            WindowSizing.ApplyStartingSize(Me)
 
             ' ==================================
             ' INITIALIZE COMPONENTS
@@ -1029,3 +977,4 @@ Public Class SuperAdminSettings
     End Sub
 
 End Class
+

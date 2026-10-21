@@ -36,6 +36,7 @@ Public Class RiderSidebarNavigation
 
     Private _layoutReady As Boolean = False
     Private _layoutBusy As Boolean = False
+    Private _navigationBusy As Boolean
 
     ' ==========================================
     ' COLORS
@@ -222,7 +223,17 @@ Public Class RiderSidebarNavigation
 
         If page <> String.Empty Then
 
-            RaiseEvent NavigateRequested(page)
+            If _navigationBusy Then Return
+            _navigationBusy = True
+            Try
+                Dim host As Control = TopLevelControl
+                If host Is Nothing Then host = Me
+                Using transition As New PanelTransition(host)
+                    RaiseEvent NavigateRequested(page)
+                End Using
+            Finally
+                _navigationBusy = False
+            End Try
 
         End If
 
@@ -2445,5 +2456,6 @@ Public Class RiderSidebarNavigation
     End Sub
 
 End Class
+
 
 

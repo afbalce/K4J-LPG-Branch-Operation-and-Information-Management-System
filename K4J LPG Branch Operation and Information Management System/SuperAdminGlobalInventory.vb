@@ -11,8 +11,6 @@ Public Class SuperAdminGlobalInventory
 
     Private Const StartMaximized As Boolean = False
 
-    Private Const InitialWidthRatio As Double = 0.92R
-    Private Const InitialHeightRatio As Double = 0.92R
 
     Private Const SidebarWidthRatio As Double = 0.18R
 
@@ -89,59 +87,7 @@ Public Class SuperAdminGlobalInventory
             ' GET SCREEN WORKING AREA
             ' ==================================
 
-            Dim work As Rectangle =
-                Screen.FromControl(Me).WorkingArea
-
-            Dim minWidth As Integer =
-                Math.Min(work.Width, Px(520))
-
-            Dim minHeight As Integer =
-                Math.Min(work.Height, Px(360))
-
-            Me.MinimumSize =
-                New Size(minWidth, minHeight)
-
-            ' ==================================
-            ' INITIAL WINDOW DIMENSIONS
-            ' ==================================
-
-            Me.WindowState =
-                FormWindowState.Normal
-
-            Me.StartPosition =
-                FormStartPosition.Manual
-
-            Dim startWidth As Integer =
-                Math.Min(
-                    work.Width,
-                    Math.Max(
-                        minWidth,
-                        CInt(
-                            work.Width * InitialWidthRatio
-                        )
-                    )
-                )
-
-            Dim startHeight As Integer =
-                Math.Min(
-                    work.Height,
-                    Math.Max(
-                        minHeight,
-                        CInt(
-                            work.Height * InitialHeightRatio
-                        )
-                    )
-                )
-
-            Me.Size = New Size(
-                startWidth,
-                startHeight
-            )
-
-            Me.Location = New Point(
-                work.Left + (work.Width - Me.Width) \ 2,
-                work.Top + (work.Height - Me.Height) \ 2
-            )
+            WindowSizing.ApplyStartingSize(Me)
 
             ' ==================================
             ' SETUP SIDEBAR AND HEADER
@@ -757,4 +703,5 @@ Public Class SuperAdminGlobalInventory
     End Property
 
 End Class
+
 

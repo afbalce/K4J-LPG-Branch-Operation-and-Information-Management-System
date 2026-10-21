@@ -8,15 +8,20 @@ Imports System.Windows.Forms
 Public Class RoundedComboBox
     Inherits UserControl
 
+    ' =====================================
+    ' INTERNAL CONTROLS
+    ' =====================================
+
     Private ReadOnly cmbInput As New ComboBox()
-    Private ReadOnly lblDisplay As New Label()
-    Private ReadOnly pnlArrow As New Panel()
+    Private ReadOnly displaySurface As ComboSurface
 
-    ' =========================
-    ' DEFAULT DESIGN SETTINGS
-    ' =========================
+    ' =====================================
+    ' DEFAULT SETTINGS
+    ' =====================================
 
-    Private _cornerRadius As Integer = 15
+    Private Const MinControlHeight As Integer = 28
+
+    Private _cornerRadius As Integer = 12
 
     Private _borderColor As Color =
         Color.FromArgb(223, 149, 63)
@@ -32,21 +37,19 @@ Public Class RoundedComboBox
     Private _arrowColor As Color =
         Color.FromArgb(80, 80, 80)
 
-    ' =========================
-    ' HINT TEXT SETTINGS
-    ' =========================
+    ' =====================================
+    ' HINT SETTINGS
+    ' =====================================
 
     Private _hintText As String = "Select an option..."
     Private _hintColor As Color = Color.Gray
 
     Private _hintFont As Font =
-        New Font("Segoe UI", 11, FontStyle.Regular)
+        New Font("Segoe UI", 9.0F, FontStyle.Regular)
 
-    Private _updatingLayout As Boolean = False
-
-    ' =========================
+    ' =====================================
     ' CONSTRUCTOR
-    ' =========================
+    ' =====================================
 
     Public Sub New()
 
@@ -61,76 +64,109 @@ Public Class RoundedComboBox
 
         Me.DoubleBuffered = True
         Me.BackColor = Color.Transparent
-        Me.Size = New Size(250, 30)
-        Me.MinimumSize = New Size(90, 30)
+
+        Me.MinimumSize = New Size(90, MinControlHeight)
+        Me.Size = New Size(250, MinControlHeight)
+
         Me.TabStop = False
 
         Me.Font = New Font(
             "Segoe UI",
-            11,
+            10.0F,
             FontStyle.Regular
         )
 
+        ' INITIALIZE CUSTOM SURFACE HERE
+        displaySurface = New ComboSurface(Me)
+
         ' INTERNAL COMBOBOX
         With cmbInput
+
             .FlatStyle = FlatStyle.Flat
             .DropDownStyle = ComboBoxStyle.DropDownList
             .DrawMode = DrawMode.Normal
+
             .BackColor = _fillColor
             .ForeColor = _textColor
             .Font = Me.Font
+
             .IntegralHeight = False
             .TabStop = True
+
         End With
 
-        ' VISIBLE HINT AND SELECTED TEXT
-        With lblDisplay
-            .AutoSize = False
-            .Text = _hintText
-            .Font = _hintFont
-            .ForeColor = _hintColor
-            .BackColor = _fillColor
-            .TextAlign = ContentAlignment.MiddleLeft
-            .AutoEllipsis = True
-            .Cursor = Cursors.Hand
-            .TabStop = False
-        End With
+        ' CUSTOM DISPLAY SURFACE
+        With displaySurface
 
-        ' CUSTOM ARROW
-        With pnlArrow
-            .BackColor = _fillColor
+            .Dock = DockStyle.Fill
+            .BackColor = Color.Transparent
             .Cursor = Cursors.Hand
             .TabStop = False
+
         End With
 
         Me.Controls.Add(cmbInput)
-        Me.Controls.Add(lblDisplay)
-        Me.Controls.Add(pnlArrow)
+        Me.Controls.Add(displaySurface)
 
-        lblDisplay.BringToFront()
-        pnlArrow.BringToFront()
+        displaySurface.BringToFront()
 
         ' EVENTS
         AddHandler cmbInput.SelectedIndexChanged,
             AddressOf Combo_SelectedIndexChanged
 
-        AddHandler lblDisplay.MouseDown,
-            AddressOf OpenDropdown
-
-        AddHandler pnlArrow.MouseDown,
-            AddressOf OpenDropdown
-
-        AddHandler pnlArrow.Paint,
-            AddressOf Arrow_Paint
+        AddHandler displaySurface.MouseClick,
+            AddressOf Surface_MouseClick
 
         UpdateComboLayout()
-        UpdateDisplay()
 
     End Sub
 
-    ' =========================
+    ' =====================================
+    ' CUSTOM PAINTING SURFACE
+    ' =====================================
+
+    Private NotInheritable Class ComboSurface
+        Inherits Control
+
+        Private ReadOnly _owner As RoundedComboBox
+
+        Public Sub New(parentControl As RoundedComboBox)
+
+            MyBase.New()
+
+            _owner = parentControl
+
+            Me.SetStyle(
+                ControlStyles.UserPaint Or
+                ControlStyles.AllPaintingInWmPaint Or
+                ControlStyles.OptimizedDoubleBuffer Or
+                ControlStyles.ResizeRedraw Or
+                ControlStyles.SupportsTransparentBackColor,
+                True
+            )
+
+            Me.BackColor = Color.Transparent
+
+        End Sub
+
+        Protected Overrides Sub OnPaint(
+            e As PaintEventArgs
+        )
+
+            MyBase.OnPaint(e)
+
+            _owner.DrawComboSurface(
+                e.Graphics,
+                Me.ClientSize
+            )
+
+        End Sub
+
+    End Class
+
+    ' =====================================
     ' CORNER RADIUS
-    ' =========================
+    ' =====================================
 
     <Category("Rounded Appearance")>
     <Description("Adjusts the corner radius.")>
@@ -143,16 +179,17 @@ Public Class RoundedComboBox
         End Get
 
         Set(value As Integer)
+
             _cornerRadius = Math.Max(0, value)
-            UpdateComboLayout()
-            Me.Invalidate()
+            RefreshSurface()
+
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' BORDER COLOR
-    ' =========================
+    ' =====================================
 
     <Category("Rounded Appearance")>
     <Description("Changes the border color.")>
@@ -165,15 +202,17 @@ Public Class RoundedComboBox
         End Get
 
         Set(value As Color)
+
             _borderColor = value
-            Me.Invalidate()
+            RefreshSurface()
+
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' BORDER THICKNESS
-    ' =========================
+    ' =====================================
 
     <Category("Rounded Appearance")>
     <Description("Adjusts the border thickness.")>
@@ -186,16 +225,17 @@ Public Class RoundedComboBox
         End Get
 
         Set(value As Integer)
+
             _borderThickness = Math.Max(0, value)
-            UpdateComboLayout()
-            Me.Invalidate()
+            RefreshSurface()
+
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' FILL COLOR
-    ' =========================
+    ' =====================================
 
     <Category("Rounded Appearance")>
     <Description("Changes the background color.")>
@@ -210,23 +250,20 @@ Public Class RoundedComboBox
         Set(value As Color)
 
             _fillColor = value
-
             cmbInput.BackColor = value
-            lblDisplay.BackColor = value
-            pnlArrow.BackColor = value
 
-            Me.Invalidate()
+            RefreshSurface()
 
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' TEXT COLOR
-    ' =========================
+    ' =====================================
 
     <Category("Rounded Appearance")>
-    <Description("Changes selected text color.")>
+    <Description("Changes the selected text color.")>
     <DesignerSerializationVisibility(
         DesignerSerializationVisibility.Visible)>
     Public Property TextColor As Color
@@ -240,19 +277,18 @@ Public Class RoundedComboBox
             _textColor = value
             cmbInput.ForeColor = value
 
-            UpdateDisplay()
-            Me.Invalidate()
+            RefreshSurface()
 
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' TEXT PADDING
-    ' =========================
+    ' =====================================
 
     <Category("Rounded Appearance")>
-    <Description("Adjusts the horizontal text padding.")>
+    <Description("Adjusts horizontal text padding.")>
     <DesignerSerializationVisibility(
         DesignerSerializationVisibility.Visible)>
     Public Property TextPadding As Integer
@@ -264,18 +300,18 @@ Public Class RoundedComboBox
         Set(value As Integer)
 
             _textPadding = Math.Max(0, value)
-            UpdateComboLayout()
+            RefreshSurface()
 
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' ARROW COLOR
-    ' =========================
+    ' =====================================
 
     <Category("Rounded Appearance")>
-    <Description("Changes dropdown arrow color.")>
+    <Description("Changes the dropdown arrow color.")>
     <DesignerSerializationVisibility(
         DesignerSerializationVisibility.Visible)>
     Public Property ArrowColor As Color
@@ -287,18 +323,18 @@ Public Class RoundedComboBox
         Set(value As Color)
 
             _arrowColor = value
-            pnlArrow.Invalidate()
+            RefreshSurface()
 
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' HINT TEXT
-    ' =========================
+    ' =====================================
 
     <Category("Hint Appearance")>
-    <Description("Placeholder when no item is selected.")>
+    <Description("Placeholder displayed when no item is selected.")>
     <DesignerSerializationVisibility(
         DesignerSerializationVisibility.Visible)>
     Public Property HintText As String
@@ -310,18 +346,18 @@ Public Class RoundedComboBox
         Set(value As String)
 
             _hintText = If(value, "")
-            UpdateDisplay()
+            RefreshSurface()
 
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' HINT COLOR
-    ' =========================
+    ' =====================================
 
     <Category("Hint Appearance")>
-    <Description("Changes placeholder color.")>
+    <Description("Changes the placeholder color.")>
     <DesignerSerializationVisibility(
         DesignerSerializationVisibility.Visible)>
     Public Property HintColor As Color
@@ -333,18 +369,18 @@ Public Class RoundedComboBox
         Set(value As Color)
 
             _hintColor = value
-            UpdateDisplay()
+            RefreshSurface()
 
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' HINT FONT
-    ' =========================
+    ' =====================================
 
     <Category("Hint Appearance")>
-    <Description("Changes placeholder font and style.")>
+    <Description("Changes the placeholder font.")>
     <DesignerSerializationVisibility(
         DesignerSerializationVisibility.Visible)>
     Public Property HintFont As Font
@@ -358,20 +394,18 @@ Public Class RoundedComboBox
             If value Is Nothing Then Return
 
             _hintFont = value
-
-            UpdateDisplay()
-            UpdateComboLayout()
+            RefreshSurface()
 
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' HINT FONT SIZE
-    ' =========================
+    ' =====================================
 
     <Category("Hint Appearance")>
-    <Description("Adjusts placeholder font size.")>
+    <Description("Adjusts the placeholder font size.")>
     <DesignerSerializationVisibility(
         DesignerSerializationVisibility.Visible)>
     Public Property HintFontSize As Single
@@ -393,16 +427,15 @@ Public Class RoundedComboBox
                 _hintFont.Unit
             )
 
-            UpdateDisplay()
-            UpdateComboLayout()
+            RefreshSurface()
 
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' COMBOBOX ITEMS
-    ' =========================
+    ' =====================================
 
     <Category("Data")>
     <DesignerSerializationVisibility(
@@ -415,14 +448,14 @@ Public Class RoundedComboBox
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' SELECTED INDEX
-    ' =========================
+    ' =====================================
 
     <Category("Data")>
+    <DefaultValue(-1)>
     <DesignerSerializationVisibility(
         DesignerSerializationVisibility.Visible)>
-    <DefaultValue(-1)>
     Public Property SelectedIndex As Integer
 
         Get
@@ -430,14 +463,17 @@ Public Class RoundedComboBox
         End Get
 
         Set(value As Integer)
+
             cmbInput.SelectedIndex = value
+            RefreshSurface()
+
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' SELECTED ITEM
-    ' =========================
+    ' =====================================
 
     <Browsable(False)>
     <DesignerSerializationVisibility(
@@ -449,14 +485,17 @@ Public Class RoundedComboBox
         End Get
 
         Set(value As Object)
+
             cmbInput.SelectedItem = value
+            RefreshSurface()
+
         End Set
 
     End Property
 
-    ' =========================
+    ' =====================================
     ' DROPDOWN HEIGHT
-    ' =========================
+    ' =====================================
 
     <Category("Behavior")>
     <DesignerSerializationVisibility(
@@ -476,9 +515,9 @@ Public Class RoundedComboBox
 
     End Property
 
-    ' =========================
-    ' SELECTED INDEX EVENT
-    ' =========================
+    ' =====================================
+    ' SELECTION CHANGED EVENT
+    ' =====================================
 
     Public Event SelectedIndexChanged As EventHandler
 
@@ -487,7 +526,7 @@ Public Class RoundedComboBox
         e As EventArgs
     )
 
-        UpdateDisplay()
+        RefreshSurface()
 
         RaiseEvent SelectedIndexChanged(
             Me,
@@ -496,48 +535,18 @@ Public Class RoundedComboBox
 
     End Sub
 
-    ' =========================
-    ' UPDATE DISPLAY TEXT
-    ' =========================
-
-    Private Sub UpdateDisplay()
-
-        If cmbInput Is Nothing OrElse
-           lblDisplay Is Nothing Then Return
-
-        If cmbInput.SelectedIndex = -1 Then
-
-            lblDisplay.Text = _hintText
-            lblDisplay.Font = _hintFont
-            lblDisplay.ForeColor = _hintColor
-
-        Else
-
-            lblDisplay.Text =
-                cmbInput.GetItemText(
-                    cmbInput.SelectedItem
-                )
-
-            lblDisplay.Font = Me.Font
-            lblDisplay.ForeColor = _textColor
-
-        End If
-
-        lblDisplay.Invalidate()
-
-    End Sub
-
-    ' =========================
+    ' =====================================
     ' OPEN DROPDOWN
-    ' =========================
+    ' =====================================
 
-    Private Sub OpenDropdown(
+    Private Sub Surface_MouseClick(
         sender As Object,
         e As MouseEventArgs
     )
 
         If e.Button <> MouseButtons.Left Then Return
         If Not Me.Enabled Then Return
+        If Me.DesignMode Then Return
 
         cmbInput.Focus()
 
@@ -546,51 +555,9 @@ Public Class RoundedComboBox
 
     End Sub
 
-    ' =========================
-    ' DRAW CUSTOM ARROW
-    ' =========================
-
-    Private Sub Arrow_Paint(
-        sender As Object,
-        e As PaintEventArgs
-    )
-
-        e.Graphics.SmoothingMode =
-            SmoothingMode.AntiAlias
-
-        Dim centerX As Integer =
-            pnlArrow.Width \ 2
-
-        Dim centerY As Integer =
-            pnlArrow.Height \ 2
-
-        Dim points As Point() = {
-            New Point(centerX - 5, centerY - 2),
-            New Point(centerX, centerY + 3),
-            New Point(centerX + 5, centerY - 2)
-        }
-
-        Using pen As New Pen(
-            _arrowColor,
-            2.0F
-        )
-
-            pen.StartCap = LineCap.Round
-            pen.EndCap = LineCap.Round
-            pen.LineJoin = LineJoin.Round
-
-            e.Graphics.DrawLines(
-                pen,
-                points
-            )
-
-        End Using
-
-    End Sub
-
-    ' =========================
-    ' ROUNDED RECTANGLE PATH
-    ' =========================
+    ' =====================================
+    ' CREATE ROUNDED RECTANGLE
+    ' =====================================
 
     Private Function CreateRoundedPath(
         rect As RectangleF,
@@ -599,14 +566,18 @@ Public Class RoundedComboBox
 
         Dim path As New GraphicsPath()
 
+        If rect.Width <= 0 OrElse
+           rect.Height <= 0 Then
+
+            Return path
+
+        End If
+
         radius = Math.Max(
             0.0F,
             Math.Min(
                 radius,
-                Math.Min(
-                    rect.Width,
-                    rect.Height
-                ) / 2.0F
+                Math.Min(rect.Width, rect.Height) / 2.0F
             )
         )
 
@@ -617,7 +588,7 @@ Public Class RoundedComboBox
 
         End If
 
-        Dim diameter As Single = radius * 2
+        Dim diameter As Single = radius * 2.0F
 
         path.AddArc(
             rect.X,
@@ -661,85 +632,97 @@ Public Class RoundedComboBox
 
     End Function
 
-    ' =========================
-    ' DRAW ROUNDED CONTROL
-    ' =========================
+    ' =====================================
+    ' DRAW COMPLETE CUSTOM COMBOBOX
+    ' =====================================
 
-    Protected Overrides Sub OnPaint(
-        e As PaintEventArgs
+    Private Sub DrawComboSurface(
+        g As Graphics,
+        controlSize As Size
     )
 
-        MyBase.OnPaint(e)
+        If controlSize.Width <= 2 OrElse
+           controlSize.Height <= 2 Then Return
 
-        e.Graphics.SmoothingMode =
-            SmoothingMode.AntiAlias
+        g.SmoothingMode = SmoothingMode.AntiAlias
 
-        If Me.Width <= 1 OrElse
-           Me.Height <= 1 Then Return
+        Dim w As Integer = controlSize.Width
+        Dim h As Integer = controlSize.Height
+
+        ' =================================
+        ' BACKGROUND
+        ' =================================
 
         Dim fillRect As New RectangleF(
             0,
             0,
-            Me.Width - 1,
-            Me.Height - 1
+            CSng(w - 1),
+            CSng(h - 1)
         )
 
-        ' DRAW BACKGROUND
         Using fillPath As GraphicsPath =
             CreateRoundedPath(
                 fillRect,
-                _cornerRadius
+                CSng(_cornerRadius)
             )
 
             Using brush As New SolidBrush(_fillColor)
 
-                e.Graphics.FillPath(
-                    brush,
-                    fillPath
-                )
+                g.FillPath(brush, fillPath)
 
             End Using
 
         End Using
 
-        ' DRAW BORDER
+        ' =================================
+        ' ROUNDED BORDER
+        ' =================================
+
         If _borderThickness > 0 Then
 
+            Dim thickness As Single =
+                CSng(
+                    Math.Min(
+                        _borderThickness,
+                        Math.Min(w, h)
+                    )
+                )
+
             Dim inset As Single =
-                _borderThickness / 2.0F
+                thickness / 2.0F + 0.5F
 
             Dim borderRect As New RectangleF(
                 inset,
                 inset,
                 Math.Max(
-                    1,
-                    Me.Width - _borderThickness - 1
+                    1.0F,
+                    CSng(w) - inset * 2.0F - 1.0F
                 ),
                 Math.Max(
-                    1,
-                    Me.Height - _borderThickness - 1
+                    1.0F,
+                    CSng(h) - inset * 2.0F - 1.0F
                 )
             )
 
-            Dim borderRadius As Single =
+            Dim adjustedRadius As Single =
                 Math.Max(
-                    0,
-                    _cornerRadius - inset
+                    0.0F,
+                    CSng(_cornerRadius) - inset
                 )
 
             Using borderPath As GraphicsPath =
                 CreateRoundedPath(
                     borderRect,
-                    borderRadius
+                    adjustedRadius
                 )
 
-                Using pen As New Pen(
+                Using borderPen As New Pen(
                     _borderColor,
-                    _borderThickness
+                    thickness
                 )
 
-                    e.Graphics.DrawPath(
-                        pen,
+                    g.DrawPath(
+                        borderPen,
                         borderPath
                     )
 
@@ -749,143 +732,162 @@ Public Class RoundedComboBox
 
         End If
 
+        ' =================================
+        ' DISPLAY TEXT
+        ' =================================
+
+        Dim isHint As Boolean =
+            (cmbInput.SelectedIndex = -1)
+
+        Dim displayText As String
+        Dim displayFont As Font
+        Dim displayColor As Color
+
+        If isHint Then
+
+            displayText = _hintText
+            displayFont = _hintFont
+            displayColor = _hintColor
+
+        Else
+
+            displayText =
+                cmbInput.GetItemText(
+                    cmbInput.SelectedItem
+                )
+
+            displayFont = Me.Font
+            displayColor = _textColor
+
+        End If
+
+        If Not Me.Enabled Then
+            displayColor = SystemColors.GrayText
+        End If
+
+        Dim paddingX As Integer =
+            Math.Max(
+                _textPadding,
+                _borderThickness + 5
+            )
+
+        Dim arrowX As Integer =
+            w - Math.Max(
+                18,
+                _textPadding + 6
+            )
+
+        Dim textWidth As Integer =
+            Math.Max(
+                1,
+                arrowX - paddingX - 13
+            )
+
+        ' KEEP TEXT INSIDE THE 28PX HEIGHT
+        Dim textRect As New Rectangle(
+            paddingX,
+            2,
+            textWidth,
+            Math.Max(1, h - 4)
+        )
+
+        Dim textFlags As TextFormatFlags =
+            TextFormatFlags.Left Or
+            TextFormatFlags.VerticalCenter Or
+            TextFormatFlags.SingleLine Or
+            TextFormatFlags.EndEllipsis Or
+            TextFormatFlags.NoPadding
+
+        TextRenderer.DrawText(
+            g,
+            displayText,
+            displayFont,
+            textRect,
+            displayColor,
+            textFlags
+        )
+
+        ' =================================
+        ' DROPDOWN ARROW
+        ' =================================
+
+        Dim centerX As Single = CSng(arrowX)
+        Dim centerY As Single = CSng(h) / 2.0F
+
+        Dim arrowPoints As PointF() = {
+            New PointF(centerX - 5.0F, centerY - 2.0F),
+            New PointF(centerX, centerY + 3.0F),
+            New PointF(centerX + 5.0F, centerY - 2.0F)
+        }
+
+        Using arrowPen As New Pen(
+            _arrowColor,
+            1.8F
+        )
+
+            arrowPen.StartCap = LineCap.Round
+            arrowPen.EndCap = LineCap.Round
+            arrowPen.LineJoin = LineJoin.Round
+
+            g.DrawLines(
+                arrowPen,
+                arrowPoints
+            )
+
+        End Using
+
     End Sub
 
-    ' =========================
-    ' FIXED COMBOBOX LAYOUT
-    ' =========================
+    ' =====================================
+    ' UPDATE LAYOUT
+    ' =====================================
 
     Private Sub UpdateComboLayout()
 
         If cmbInput Is Nothing OrElse
-           lblDisplay Is Nothing OrElse
-           pnlArrow Is Nothing Then Return
+           displaySurface Is Nothing Then Return
 
-        If _updatingLayout Then Return
-
-        _updatingLayout = True
-
-        Try
-
-            ' HORIZONTAL PADDING
-            Dim paddingX As Integer =
-                Math.Max(
-                    _textPadding,
-                    Math.Max(
-                        _borderThickness + 4,
-                        _cornerRadius \ 2 + 2
-                    )
-                )
-
-            ' PROTECT TOP AND BOTTOM BORDER
-            Dim marginY As Integer =
-                Math.Max(
-                    5,
-                    _borderThickness + 3
-                )
-
-            cmbInput.Font = Me.Font
-
-            ' GET ACTUAL COMBOBOX HEIGHT
-            Dim comboHeight As Integer =
-                cmbInput.PreferredHeight
-
-            ' AUTOMATIC MINIMUM HEIGHT
-            Dim minimumHeight As Integer =
-                comboHeight + marginY * 2
-
-            ' AUTOMATIC MINIMUM WIDTH
-            Dim minimumWidth As Integer =
-                Math.Max(
-                    90,
-                    paddingX * 2 + 60
-                )
-
-            Dim requiredMinimum As New Size(
-                minimumWidth,
-                minimumHeight
+        Dim availableWidth As Integer =
+            Math.Max(
+                1,
+                Me.ClientSize.Width
             )
 
-            ' PREVENT CONTROL FROM BECOMING
-            ' SMALLER THAN ITS CONTENT
-            If Me.MinimumSize <> requiredMinimum Then
+        ' KEEP NATIVE COMBOBOX BEHIND SURFACE
+        cmbInput.SetBounds(
+            0,
+            0,
+            availableWidth,
+            cmbInput.PreferredHeight
+        )
 
-                Me.MinimumSize = requiredMinimum
+        cmbInput.DropDownWidth = availableWidth
 
-            End If
+        ' ENSURE CUSTOM SURFACE IS VISIBLE
+        displaySurface.Dock = DockStyle.Fill
+        displaySurface.BringToFront()
 
-            ' AVAILABLE WIDTH
-            Dim availableWidth As Integer =
-                Math.Max(
-                    30,
-                    Me.ClientSize.Width - paddingX * 2
-                )
-
-            ' VERTICALLY CENTER THE COMBOBOX
-            Dim comboY As Integer =
-                Math.Max(
-                    marginY,
-                    (Me.ClientSize.Height - comboHeight) \ 2
-                )
-
-            ' INTERNAL COMBOBOX
-            cmbInput.SetBounds(
-                paddingX,
-                comboY,
-                availableWidth,
-                comboHeight
-            )
-
-            ' CUSTOM ARROW WIDTH
-            Dim arrowWidth As Integer =
-                Math.Min(
-                    32,
-                    Math.Max(
-                        20,
-                        availableWidth \ 3
-                    )
-                )
-
-            ' TEXT DISPLAY WIDTH
-            Dim displayWidth As Integer =
-                Math.Max(
-                    1,
-                    availableWidth - arrowWidth
-                )
-
-            ' HINT / SELECTED TEXT LABEL
-            lblDisplay.SetBounds(
-                paddingX,
-                comboY,
-                displayWidth,
-                comboHeight
-            )
-
-            ' CUSTOM DROPDOWN ARROW
-            pnlArrow.SetBounds(
-                paddingX + displayWidth,
-                comboY,
-                arrowWidth,
-                comboHeight
-            )
-
-            lblDisplay.BringToFront()
-            pnlArrow.BringToFront()
-
-            pnlArrow.Invalidate()
-            Me.Invalidate()
-
-        Finally
-
-            _updatingLayout = False
-
-        End Try
+        RefreshSurface()
 
     End Sub
 
-    ' =========================
+    ' =====================================
+    ' REFRESH CUSTOM SURFACE
+    ' =====================================
+
+    Private Sub RefreshSurface()
+
+        If displaySurface IsNot Nothing Then
+            displaySurface.Invalidate()
+        End If
+
+        Me.Invalidate()
+
+    End Sub
+
+    ' =====================================
     ' RESIZE EVENT
-    ' =========================
+    ' =====================================
 
     Protected Overrides Sub OnResize(
         e As EventArgs
@@ -894,13 +896,12 @@ Public Class RoundedComboBox
         MyBase.OnResize(e)
 
         UpdateComboLayout()
-        Me.Invalidate()
 
     End Sub
 
-    ' =========================
+    ' =====================================
     ' FONT CHANGE EVENT
-    ' =========================
+    ' =====================================
 
     Protected Overrides Sub OnFontChanged(
         e As EventArgs
@@ -911,17 +912,33 @@ Public Class RoundedComboBox
         If cmbInput IsNot Nothing Then
 
             cmbInput.Font = Me.Font
-
             UpdateComboLayout()
-            UpdateDisplay()
 
         End If
 
     End Sub
 
-    ' =========================
-    ' FOCUS EVENT
-    ' =========================
+    ' =====================================
+    ' ENABLED CHANGE
+    ' =====================================
+
+    Protected Overrides Sub OnEnabledChanged(
+        e As EventArgs
+    )
+
+        MyBase.OnEnabledChanged(e)
+
+        If cmbInput IsNot Nothing Then
+            cmbInput.Enabled = Me.Enabled
+        End If
+
+        RefreshSurface()
+
+    End Sub
+
+    ' =====================================
+    ' CONTROL FOCUS
+    ' =====================================
 
     Protected Overrides Sub OnEnter(
         e As EventArgs
@@ -933,26 +950,6 @@ Public Class RoundedComboBox
            Not cmbInput.Focused Then
 
             cmbInput.Focus()
-
-        End If
-
-    End Sub
-
-    ' =========================
-    ' MOUSE DOWN EVENT
-    ' =========================
-
-    Protected Overrides Sub OnMouseDown(
-        e As MouseEventArgs
-    )
-
-        MyBase.OnMouseDown(e)
-
-        If e.Button = MouseButtons.Left AndAlso
-           Me.Enabled Then
-
-            cmbInput.Focus()
-            cmbInput.DroppedDown = True
 
         End If
 
