@@ -209,86 +209,16 @@ Public Class SuperAdminRiderAccounts
     ' ==========================================
 
     Private Sub SetupSidebar()
-
-        _sidebar = FindSidebar(Me)
-
-        If _sidebar Is Nothing Then
-
-            _sidebar =
-                New SuperAdminSidebarNavigation()
-
-            _sidebar.Name =
-                "riderAccountsSidebarNavigation"
-
-            Me.Controls.Add(_sidebar)
-
-        End If
-
-        Dim parentControl As Control =
-            _sidebar.Parent
-
-        If TypeOf parentControl Is Panel AndAlso
-           parentControl.Parent Is Me AndAlso
-           parentControl.Controls.Count = 1 Then
-
-            _sidebarHost = parentControl
-
-            _sidebar.Dock = DockStyle.Fill
-            _sidebar.Margin = New Padding(0)
-
-        Else
-
-            If _sidebar.Parent IsNot Me Then
-
-                Me.Controls.Add(_sidebar)
-
-            End If
-
-            _sidebarHost = _sidebar
-
-        End If
-
-        ' ==================================
-        ' REMOVE SIZE RESTRICTIONS
-        ' ==================================
-
-        _sidebarHost.AutoSize = False
-
-        _sidebarHost.MinimumSize = Size.Empty
-        _sidebarHost.MaximumSize = Size.Empty
-
-        _sidebarHost.Margin = New Padding(0)
-        _sidebarHost.Padding = New Padding(0)
-
-        ' ==================================
-        ' DOCK LEFT
-        ' ==================================
-
-        _sidebarHost.Dock = DockStyle.Left
-
-        _sidebarHost.Width =
-            GetSidebarWidth()
-
-        ' ==================================
-        ' DISABLE OUTER SCROLLBARS
-        ' ==================================
-
+        _sidebar = SuperAdminSidebarNavigation1
+        _sidebarHost = RiderAccountsMainContainer.Panel1
+        RiderAccountsMainContainer.Dock = DockStyle.Fill
+        RiderAccountsMainContainer.FixedPanel = FixedPanel.Panel1
+        RiderAccountsMainContainer.IsSplitterFixed = True
+        RiderAccountsMainContainer.Panel1MinSize = 0
+        RiderAccountsMainContainer.Panel2MinSize = 0
+        _sidebar.Dock = DockStyle.Fill
+        _sidebar.Margin = Padding.Empty
         _sidebar.AutoScroll = False
-        _sidebar.AutoScrollMinSize = Size.Empty
-
-        Dim host As ScrollableControl =
-            TryCast(
-                _sidebarHost,
-                ScrollableControl
-            )
-
-        If host IsNot Nothing Then
-
-            host.AutoScroll = False
-            host.AutoScrollMinSize = Size.Empty
-
-        End If
-
     End Sub
 
     ' ==========================================
@@ -296,140 +226,48 @@ Public Class SuperAdminRiderAccounts
     ' ==========================================
 
     Private Sub SetupHeader()
-
-        _header = FindHeader(Me)
-
-        ' ==================================
-        ' REUSE EXISTING RIGHT PANEL
-        ' ==================================
-
-        If _header IsNot Nothing Then
-
-            Dim topControl As Control = _header
-
-            While topControl.Parent IsNot Nothing AndAlso
-                  topControl.Parent IsNot Me
-
-                topControl = topControl.Parent
-
-            End While
-
-            If TypeOf topControl Is Panel AndAlso
-               topControl.Parent Is Me AndAlso
-               topControl IsNot _sidebarHost Then
-
-                _rightHost =
-                    DirectCast(topControl, Panel)
-
-            End If
-
-        End If
-
-        ' ==================================
-        ' CREATE PANEL IF MISSING
-        ' ==================================
-
-        If _rightHost Is Nothing Then
-
-            _rightHost = New Panel()
-
-            _rightHost.Name =
-                "riderAccountsRightPanel"
-
-            Me.Controls.Add(_rightHost)
-
-        End If
-
-        ' ==================================
-        ' RIGHT PANEL SETTINGS
-        ' ==================================
-
-        _rightHost.Dock = DockStyle.None
-
-        _rightHost.Anchor =
-            AnchorStyles.Top Or AnchorStyles.Left
-
-        _rightHost.AutoSize = False
-        _rightHost.AutoScroll = False
-
-        _rightHost.AutoScrollMinSize = Size.Empty
-
-        _rightHost.MinimumSize = Size.Empty
-        _rightHost.MaximumSize = Size.Empty
-
-        _rightHost.Margin = New Padding(0)
-        _rightHost.Padding = New Padding(0)
-
-        _rightHost.BackColor =
-            Color.FromArgb(241, 245, 249)
-
-        ' ==================================
-        ' HEADERBAR
-        ' ==================================
-
-        If _header Is Nothing Then
-
-            _header = New HeaderBar()
-
-            _header.Name =
-                "riderAccountsHeaderBar"
-
-        End If
-
-        If _header.Parent IsNot _rightHost Then
-
-            _header.Parent = _rightHost
-
-        End If
-
-        _header.AutoSize = False
-
-        _header.MinimumSize = Size.Empty
-        _header.MaximumSize = Size.Empty
-
-        _header.Padding = New Padding(0)
-        _header.Margin = New Padding(0)
-
-        _header.Dock = DockStyle.Top
-
-        _header.Height = Px(HeaderHeight)
-
-        ' ==================================
-        ' HEADER TEXT
-        ' ==================================
-
+        _rightHost = RiderAccountsMainContainer.Panel2
+        _rightHost.BackColor = Color.FromArgb(241, 245, 249)
+        riderAccountsContentContainer.Dock = DockStyle.Fill
+        riderAccountsContentContainer.Panel1MinSize = 0
+        riderAccountsContentContainer.Panel2MinSize = 0
+        _header = HeaderBar1
+        _header.Dock = DockStyle.Fill
+        _header.Margin = Padding.Empty
         _header.SetParentPageName("Super Admin")
         _header.SetPageName("Rider Accounts")
-
-        ' ==================================
-        ' CONTROL ORDER
-        ' ==================================
-
-        _rightHost.BringToFront()
-        _sidebarHost.BringToFront()
-        _header.BringToFront()
-
     End Sub
 
     ' ==========================================
     ' SYSTEM HEADING BELOW HEADERBAR
     ' ==========================================
 
+    Private Sub SetupSystemHeading()
+        mainContentHolder.Dock = DockStyle.Fill
+        mainContentHolder.Panel1MinSize = 0
+        mainContentHolder.Panel2MinSize = 0
+        _systemHeading = SystemHeading1
+        _systemHeading.Dock = DockStyle.Top
+        _systemHeading.Margin = Padding.Empty
+        _systemHeading.SetHeading("RIDER ACCOUNTS", "Manage rider accounts and information")
+    End Sub
+
+    Private Function FindSystemHeading(root As Control) As SystemHeading
+        If root Is Nothing Then Return Nothing
+
+        Dim found As SystemHeading = TryCast(root, SystemHeading)
+        If found IsNot Nothing Then Return found
+
+        For Each child As Control In root.Controls
+            found = FindSystemHeading(child)
+            If found IsNot Nothing Then Return found
+        Next
+
+        Return Nothing
+    End Function
+
     Private Sub SetupAddRiderAction()
-        ' Reuse the Designer button when present; otherwise create it only at runtime.
-        Dim existing = Controls.Find("addRiderButton", True)
-        If existing.Length > 0 Then _addRiderAction = TryCast(existing(0), RoundedButton)
-        If _addRiderAction Is Nothing Then
-            _addRiderAction = New RoundedButton With {
-                .Name = "addRiderButton",
-                .FillColor = Color.FromArgb(242, 106, 0),
-                .ForeColor = Color.White,
-                .BorderThickness = 0,
-                .CornerRadius = 10
-            }
-            _systemHeading.Controls.Add(_addRiderAction)
-        End If
-        _addRiderAction.SetIconBeforeText("plus.png", "Add Rider")
+        _addRiderAction = addRiderButton
         RemoveHandler _addRiderAction.Click, AddressOf OpenAddRiderAccount
         AddHandler _addRiderAction.Click, AddressOf OpenAddRiderAccount
         _addRiderAction.BringToFront()
@@ -457,6 +295,7 @@ Public Class SuperAdminRiderAccounts
                 If pageKey = "Rider Accounts" Then
                     Using transition As New PanelTransition(Me)
                         page.Hide()
+                        RiderAccountsManagement1.ReloadAccounts()
                         _addRiderAction.Focus()
                     End Using
                 End If
@@ -468,6 +307,7 @@ Public Class SuperAdminRiderAccounts
                 _addRiderAction.Focus()
             End Sub
         Using transition As New PanelTransition(Me)
+            SidebarNavigation.CopyUser(_sidebar, page)
             Controls.Add(page)
             page.Show()
             page.BringToFront()
@@ -504,53 +344,6 @@ Public Class SuperAdminRiderAccounts
         End If
         _addRiderAction.BringToFront()
     End Sub
-
-    Private Sub SetupSystemHeading()
-
-        If _rightHost Is Nothing Then Return
-
-        _systemHeading = FindSystemHeading(Me)
-
-        If _systemHeading Is Nothing Then
-            _systemHeading = New SystemHeading()
-            _systemHeading.Name = "riderAccountsSystemHeading"
-        End If
-
-        If _systemHeading.Parent IsNot _rightHost Then
-            _systemHeading.Parent = _rightHost
-        End If
-
-        _systemHeading.Dock = DockStyle.None
-        _systemHeading.Anchor = AnchorStyles.Top Or AnchorStyles.Left
-        _systemHeading.MinimumSize = Size.Empty
-        _systemHeading.MaximumSize = Size.Empty
-        _systemHeading.AutoSize = False
-        _systemHeading.AutoScroll = False
-        _systemHeading.Margin = New Padding(0)
-        _systemHeading.Padding = New Padding(0)
-
-        ' Use your existing Designer label text, or set a default if empty.
-        _systemHeading.SetHeading(
-            "RIDER ACCOUNTS",
-            "Manage rider accounts and information")
-
-        _systemHeading.BringToFront()
-
-    End Sub
-
-    Private Function FindSystemHeading(root As Control) As SystemHeading
-        If root Is Nothing Then Return Nothing
-
-        Dim found As SystemHeading = TryCast(root, SystemHeading)
-        If found IsNot Nothing Then Return found
-
-        For Each child As Control In root.Controls
-            found = FindSystemHeading(child)
-            If found IsNot Nothing Then Return found
-        Next
-
-        Return Nothing
-    End Function
 
     ' ==========================================
     ' CALCULATE SIDEBAR WIDTH
@@ -596,137 +389,38 @@ Public Class SuperAdminRiderAccounts
     ' ==========================================
 
     Private Sub UpdateResponsiveLayout()
-
-        If Not _ready OrElse _busy Then Return
-
-        If Me.WindowState =
-            FormWindowState.Minimized Then Return
-
-        If Me.ClientSize.Width < 1 OrElse
-           Me.ClientSize.Height < 1 Then Return
-
+        If Not _ready OrElse _busy OrElse WindowState = FormWindowState.Minimized Then Return
+        If ClientSize.Width < 1 OrElse ClientSize.Height < 1 Then Return
         _busy = True
-
-        Me.SuspendLayout()
-
+        SuspendLayout()
         Try
-
-            Me.AutoScroll = False
-            Me.AutoScrollMinSize = Size.Empty
-
-            ' ==================================
-            ' RESIZE SIDEBAR
-            ' ==================================
-
-            If _sidebarHost IsNot Nothing AndAlso
-               Not _sidebarHost.IsDisposed Then
-
-                _sidebarHost.Dock = DockStyle.Left
-
-                Dim targetWidth As Integer =
-                    GetSidebarWidth()
-
-                If _sidebarHost.Width <> targetWidth Then
-
-                    _sidebarHost.Width = targetWidth
-
-                End If
-
-                If _sidebarHost IsNot _sidebar AndAlso
-                   _sidebar IsNot Nothing Then
-
-                    _sidebar.Dock = DockStyle.Fill
-
-                End If
-
-            End If
-
-            ' ==================================
-            ' RESIZE RIGHT PANEL
-            ' ==================================
-
-            If _rightHost IsNot Nothing AndAlso
-               Not _rightHost.IsDisposed Then
-
-                Dim leftEdge As Integer =
-                    If(
-                        _sidebarHost Is Nothing,
-                        0,
-                        _sidebarHost.Right
-                    )
-
-                leftEdge =
-                    Math.Max(
-                        0,
-                        Math.Min(
-                            Me.ClientSize.Width,
-                            leftEdge
-                        )
-                    )
-
-                Dim availableWidth As Integer =
-                    Math.Max(
-                        0,
-                        Me.ClientSize.Width - leftEdge
-                    )
-
-                ' NO GAP BETWEEN SIDEBAR
-                ' AND RIGHT PANEL
-
-                _rightHost.SetBounds(
-                    leftEdge,
-                    0,
-                    availableWidth,
-                    Me.ClientSize.Height
-                )
-
-            End If
-
-            ' ==================================
-            ' RESIZE HEADERBAR
-            ' ==================================
-
-            If _header IsNot Nothing AndAlso
-               Not _header.IsDisposed Then
-
-                _header.Dock = DockStyle.Top
-
-                _header.Height = Px(HeaderHeight)
-
-                ' UPDATE THE BREADCRUMB, CLOCK
-                ' AND NOTIFICATION POSITIONS
-
-                _header.RefreshHeaderLayout()
-
-            End If
-
-            ' ==================================
-            ' RESIZE SYSTEM HEADING BELOW HEADER
-            ' ==================================
-
-            If _systemHeading IsNot Nothing AndAlso
-               Not _systemHeading.IsDisposed AndAlso
-               _rightHost IsNot Nothing Then
-
-                Dim headingTop As Integer = Px(HeaderHeight)
-                Dim headingWidth As Integer =
-                    Math.Max(1, _rightHost.ClientSize.Width)
-
-                _systemHeading.SetBounds(0, headingTop,
-                    headingWidth, _systemHeading.Height)
-                _systemHeading.RefreshHeadingLayout()
-                LayoutAddRiderAction()
-
-            End If
-
+            SetSectionSize(RiderAccountsMainContainer, GetSidebarWidth())
+            SetSectionSize(riderAccountsContentContainer, Px(HeaderHeight))
+            _header.RefreshHeaderLayout()
+            _systemHeading.RefreshHeadingLayout()
+            SetSectionSize(mainContentHolder, Math.Max(Px(65), _systemHeading.Height))
+            LayoutAddRiderAction()
+            Dim scrollHeight = If(mainContents.Width < RiderAccountsCards.StripWidth,
+                                  SystemInformation.HorizontalScrollBarHeight, 0)
+            SetSectionSize(mainContents, RiderAccountsCards.StripHeight + scrollHeight)
         Finally
-
-            Me.ResumeLayout(True)
-
+            ResumeLayout(True)
             _busy = False
-
         End Try
+    End Sub
 
+    Private Sub SetSectionSize(container As SplitContainer, desiredSize As Integer)
+        Dim length = If(container.Orientation = Orientation.Vertical, container.ClientSize.Width, container.ClientSize.Height)
+        Dim available = Math.Max(0, length - container.SplitterWidth - container.Panel2MinSize)
+        Dim target = Math.Max(container.Panel1MinSize, Math.Min(desiredSize, available))
+        If target <= available AndAlso container.SplitterDistance <> target Then
+            container.SplitterDistance = target
+        End If
+    End Sub
+
+    Protected Overrides Sub OnDpiChanged(e As DpiChangedEventArgs)
+        MyBase.OnDpiChanged(e)
+        UpdateResponsiveLayout()
     End Sub
 
     ' ==========================================
@@ -760,44 +454,31 @@ Public Class SuperAdminRiderAccounts
 
     End Sub
 
+    Private Sub UpdateRiderTotals() Handles RiderAccountsManagement1.AccountsReloaded
+        Dim rows = TryCast(RiderAccountsManagement1.StyledDataGridView1.DataSource, DataTable)
+        If rows Is Nothing Then Return
+        RiderAccountsCards1.ShowTotals(rows)
+    End Sub
+
     ' ==========================================
     ' AVAILABLE RIDER ACCOUNTS CONTENT AREA
     ' ==========================================
 
     Public ReadOnly Property RiderAccountsContentBounds As Rectangle
-
         Get
-
-            Dim leftEdge As Integer =
-                If(
-                    _sidebarHost Is Nothing,
-                    0,
-                    _sidebarHost.Right
-                )
-
-            Dim topEdge As Integer = Px(HeaderHeight)
-            If _systemHeading IsNot Nothing AndAlso Not _systemHeading.IsDisposed Then
-                topEdge += _systemHeading.Height
+            Dim content = mainContentHolder.Panel2
+            If IsHandleCreated AndAlso content.IsHandleCreated Then
+                Return RectangleToClient(content.RectangleToScreen(content.ClientRectangle))
             End If
-
-            Return New Rectangle(
-                leftEdge,
-                topEdge,
-                Math.Max(
-                    0,
-                    Me.ClientSize.Width - leftEdge
-                ),
-                Math.Max(
-                    0,
-                    Me.ClientSize.Height - topEdge
-                )
-            )
-
+            Return New Rectangle(RiderAccountsMainContainer.Panel2.Left,
+                                 riderAccountsContentContainer.Panel2.Top + mainContentHolder.Panel2.Top,
+                                 content.ClientSize.Width, content.ClientSize.Height)
         End Get
-
     End Property
 
 End Class
+
+
 
 
 

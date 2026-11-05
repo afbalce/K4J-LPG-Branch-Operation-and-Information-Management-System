@@ -715,7 +715,6 @@ Public Class RiderDelivery
     Public Event SignOutRequested()
 
     Private Sub SidebarNavigate(pageKey As String) Handles RiderSidebarNavigation1.NavigateRequested
-        ShowRiderPage(pageKey)
         RaiseEvent NavigateRequested(pageKey)
     End Sub
 

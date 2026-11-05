@@ -32,6 +32,7 @@ Partial Class SuperAdminAdminAccounts
         SystemHeading1 = New SystemHeading()
         mainContents = New SplitContainer()
         AdminAccountsCards1 = New AdminAccountsCards()
+        AdminAccountsManagement1 = New AdminAccountsManagement()
         CType(AdminAccountsMainContainer, ComponentModel.ISupportInitialize).BeginInit()
         AdminAccountsMainContainer.Panel1.SuspendLayout()
         AdminAccountsMainContainer.Panel2.SuspendLayout()
@@ -46,6 +47,7 @@ Partial Class SuperAdminAdminAccounts
         mainContentHolder.SuspendLayout()
         CType(mainContents, ComponentModel.ISupportInitialize).BeginInit()
         mainContents.Panel1.SuspendLayout()
+        mainContents.Panel2.SuspendLayout()
         mainContents.SuspendLayout()
         SuspendLayout()
         ' 
@@ -174,6 +176,10 @@ Partial Class SuperAdminAdminAccounts
         ' mainContents.Panel1
         ' 
         mainContents.Panel1.Controls.Add(AdminAccountsCards1)
+        ' 
+        ' mainContents.Panel2
+        ' 
+        mainContents.Panel2.Controls.Add(AdminAccountsManagement1)
         mainContents.Size = New Size(924, 580)
         mainContents.SplitterDistance = 105
         mainContents.TabIndex = 0
@@ -185,6 +191,14 @@ Partial Class SuperAdminAdminAccounts
         AdminAccountsCards1.Name = "AdminAccountsCards1"
         AdminAccountsCards1.Size = New Size(924, 115)
         AdminAccountsCards1.TabIndex = 1
+        ' 
+        ' AdminAccountsManagement1
+        ' 
+        AdminAccountsManagement1.Dock = DockStyle.Fill
+        AdminAccountsManagement1.Location = New Point(0, 0)
+        AdminAccountsManagement1.Name = "AdminAccountsManagement1"
+        AdminAccountsManagement1.Size = New Size(924, 471)
+        AdminAccountsManagement1.TabIndex = 0
         ' 
         ' SuperAdminAdminAccounts
         ' 
@@ -207,6 +221,7 @@ Partial Class SuperAdminAdminAccounts
         CType(mainContentHolder, ComponentModel.ISupportInitialize).EndInit()
         mainContentHolder.ResumeLayout(False)
         mainContents.Panel1.ResumeLayout(False)
+        mainContents.Panel2.ResumeLayout(False)
         CType(mainContents, ComponentModel.ISupportInitialize).EndInit()
         mainContents.ResumeLayout(False)
         ResumeLayout(False)
@@ -219,9 +234,12 @@ Partial Class SuperAdminAdminAccounts
     Friend WithEvents mainContentHolder As SplitContainer
     Friend WithEvents SystemHeading1 As SystemHeading
     Friend WithEvents mainContents As SplitContainer
+    Friend WithEvents AdminAccountsManagement1 As AdminAccountsManagement
     Friend WithEvents AdminAccountsCards1 As AdminAccountsCards
     Friend WithEvents addAdminButton As RoundedButton
 End Class
+
+
 
 
 

@@ -160,10 +160,12 @@ Partial Class SuperAdminAddAdminAccount
         backButton.BorderThickness = 1
         backButton.CornerRadius = 8
         backButton.Cursor = Cursors.Hand
+        backButton.DrawBackArrow = True
         backButton.FillColor = Color.White
         backButton.FlatStyle = FlatStyle.Flat
-        backButton.Font = New Font("Inter", 6.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        backButton.Font = New Font("Inter", 6F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         backButton.ForeColor = Color.FromArgb(CByte(100), CByte(116), CByte(139))
+        backButton.HorizontalContentInset = 0
         backButton.ImageAlign = ContentAlignment.MiddleLeft
         backButton.Location = New Point(5, 20)
         backButton.MinimumSize = New Size(30, 25)
@@ -171,8 +173,6 @@ Partial Class SuperAdminAddAdminAccount
         backButton.Size = New Size(40, 40)
         backButton.TabIndex = 0
         backButton.Text = "←"
-        backButton.HorizontalContentInset = 0
-        backButton.DrawBackArrow = True
         backButton.TextImageRelation = TextImageRelation.ImageBeforeText
         backButton.UseVisualStyleBackColor = False
         ' 
@@ -180,7 +180,7 @@ Partial Class SuperAdminAddAdminAccount
         ' 
         superAdminLabel.AutoSize = True
         superAdminLabel.BackColor = Color.Transparent
-        superAdminLabel.Font = New Font("Inter", 6.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        superAdminLabel.Font = New Font("Inter", 6F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         superAdminLabel.ForeColor = Color.FromArgb(CByte(153), CByte(161), CByte(175))
         superAdminLabel.Location = New Point(32, 0)
         superAdminLabel.Name = "superAdminLabel"
@@ -208,7 +208,7 @@ Partial Class SuperAdminAddAdminAccount
         ' 
         ' SuperAdminAddAdminAccount
         ' 
-        AutoScaleDimensions = New SizeF(10.0F, 25.0F)
+        AutoScaleDimensions = New SizeF(10F, 25F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(1178, 724)
         Controls.Add(AddAccountMainContainer)

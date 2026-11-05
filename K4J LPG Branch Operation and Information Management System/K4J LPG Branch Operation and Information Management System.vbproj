@@ -33,6 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Fonts\Inter-*.ttf" LogicalName="%(Filename)%(Extension)" />
+    <None Update="Fonts\LICENSE.txt" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Update="AdminAccountsManagement.Table.resx" ManifestResourceName="$(RootNamespace).AdminAccountsManagement.Table" />
+    <EmbeddedResource Update="AddEmployeeAccount.Responsive.resx" ManifestResourceName="$(RootNamespace).AddEmployeeAccount.Responsive" />
     <EmbeddedResource Update="My Project\Resources.resx">
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -56,4 +60,5 @@
     <None Update="Icons\x.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
+
 

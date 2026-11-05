@@ -1,4 +1,4 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.ApplicationServices
 
 Namespace My
     ' The following events are available for MyApplication:
@@ -24,6 +24,12 @@ Namespace My
     ' End Sub
 
     Partial Friend Class MyApplication
+        Friend Sub ReturnToLogin(previous As Form)
+            Dim login As New LoginForm()
+            login.Show()
+            If MainForm Is previous Then MainForm = login
+            previous.Close()
+        End Sub
 
     End Class
 End Namespace

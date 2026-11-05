@@ -308,6 +308,7 @@ Public Class SuperAdminAdminAccounts
                 If pageKey = "Admin Accounts" Then
                     Using transition As New PanelTransition(Me)
                         page.Hide()
+                        AdminAccountsManagement1.ReloadAccounts()
                         _addAdminAction.Focus()
                     End Using
                 End If
@@ -319,6 +320,7 @@ Public Class SuperAdminAdminAccounts
                 _addAdminAction.Focus()
             End Sub
         Using transition As New PanelTransition(Me)
+            SidebarNavigation.CopyUser(_sidebar, page)
             Controls.Add(page)
             page.Show()
             page.BringToFront()
@@ -466,6 +468,10 @@ Public Class SuperAdminAdminAccounts
 
     End Sub
 
+    Private Sub AdminAccountsManagement1_Load(sender As Object, e As EventArgs) Handles AdminAccountsManagement1.Load
+
+    End Sub
+
     ' ==========================================
     ' AVAILABLE ADMIN ACCOUNTS CONTENT AREA
     ' ==========================================
@@ -483,6 +489,7 @@ Public Class SuperAdminAdminAccounts
     End Property
 
 End Class
+
 
 
 

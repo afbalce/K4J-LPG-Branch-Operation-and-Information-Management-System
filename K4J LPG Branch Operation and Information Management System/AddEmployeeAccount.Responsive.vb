@@ -9,6 +9,7 @@ Partial Public Class AddEmployeeAccount
         MyBase.OnLoad(e)
         If DesignMode OrElse System.ComponentModel.LicenseManager.UsageMode =
             System.ComponentModel.LicenseUsageMode.Designtime Then Return
+        PrepareEmployeeForm()
         Dock = DockStyle.Fill
         AutoScroll = True
         createAccountButton.SetIconBeforeText("admin_hover_white.png", "Create Account", 18, 18, 8)
@@ -179,4 +180,5 @@ Partial Public Class AddEmployeeAccount
         Next
     End Sub
 End Class
+
 

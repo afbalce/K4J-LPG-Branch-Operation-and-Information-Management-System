@@ -22,7 +22,7 @@ Partial Class AddEmployeeAccount
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(AddEmployeeAccount))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddEmployeeAccount))
         createAccountButton = New RoundedButton()
         cancelButton = New RoundedButton()
         accCredentialsTitle = New Label()
@@ -79,13 +79,13 @@ Partial Class AddEmployeeAccount
         createAccountButton.FillColor = Color.FromArgb(CByte(232), CByte(101), CByte(10))
         createAccountButton.FlatAppearance.BorderSize = 0
         createAccountButton.FlatStyle = FlatStyle.Flat
-        createAccountButton.Font = New Font("Inter SemiBold", 6F, FontStyle.Bold)
+        createAccountButton.Font = New Font("Inter SemiBold", 5F, FontStyle.Bold)
         createAccountButton.ForeColor = Color.White
         createAccountButton.IconFileName = "admin_hover_white.png"
-        createAccountButton.IconWidth = 18
         createAccountButton.IconHeight = 18
-        createAccountButton.Image = CType(resources.GetObject("createAccountButton.Image"), Image)
         createAccountButton.IconTextSpacing = 8
+        createAccountButton.IconWidth = 18
+        createAccountButton.Image = CType(resources.GetObject("createAccountButton.Image"), Image)
         createAccountButton.ImageAlign = ContentAlignment.MiddleLeft
         createAccountButton.Location = New Point(24, 524)
         createAccountButton.MinimumSize = New Size(50, 25)

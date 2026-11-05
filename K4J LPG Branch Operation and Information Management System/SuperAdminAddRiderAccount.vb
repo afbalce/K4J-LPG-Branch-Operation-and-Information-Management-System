@@ -9,6 +9,8 @@ Public Class SuperAdminAddRiderAccount
     Public Event SignOutRequested()
 
     Private Sub PageLoaded(sender As Object, e As EventArgs) Handles MyBase.Load
+        AddEmployeeAccount1.EmployeeRole = "Rider"
+        AddHandler AddEmployeeAccount1.Finished, AddressOf BackToAccounts
         HeaderBar1.SetParentPageName("Super Admin")
         HeaderBar1.SetPageName("Add Rider")
         SystemHeading1.SetHeading("ADD RIDER ACCOUNT", "Create a new branch rider")
@@ -152,6 +154,7 @@ Public Class SuperAdminAddRiderAccount
         RaiseEvent SignOutRequested()
     End Sub
 End Class
+
 
 
 

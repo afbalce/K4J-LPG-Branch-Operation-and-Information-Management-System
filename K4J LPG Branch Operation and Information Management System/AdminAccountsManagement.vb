@@ -1,115 +1,96 @@
-﻿
-Imports System.Data
-Imports MySql.Data.MySqlClient
-
 Public Class AdminAccountsManagement
+    Protected Overridable ReadOnly Property AccountRole As String
+        Get
+            Return "Admin"
+        End Get
+    End Property
 
-    Private searchIcon As Image
-
+    Friend Event AccountsReloaded()
+    Private branchRows As DataTable
     Protected Overrides Sub OnLoad(e As EventArgs)
         MyBase.OnLoad(e)
-
-        If DesignMode OrElse
-           System.ComponentModel.LicenseManager.UsageMode =
-           System.ComponentModel.LicenseUsageMode.Designtime Then Return
-
-        ' Load MySQL records into StyledDataGridView
-        LoadBranches()
-
-        ' Existing search button icon code
-        Dim matches = Controls.Find("searchButton", True)
-        If matches.Length = 0 Then Return
-
-        Dim rounded = TryCast(matches(0), RoundedButton)
-        If rounded IsNot Nothing Then
-            rounded.IconFileName = "search.png"
-            rounded.IconWidth = CInt(18 * DeviceDpi / 96.0R)
-            rounded.IconHeight = rounded.IconWidth
-            rounded.ImageAlign = ContentAlignment.MiddleCenter
-            Return
-        End If
-
-        Dim button = TryCast(matches(0), Button)
-        If button Is Nothing OrElse searchIcon IsNot Nothing Then Return
-
-        Dim path = IO.Path.Combine(
-            AppContext.BaseDirectory, "Icons", "search.png")
-
-        If Not IO.File.Exists(path) Then Return
-
-        Dim iconSize = Math.Max(
-            1, CInt(18 * DeviceDpi / 96.0R))
-
-        Using source = Image.FromFile(path)
-            searchIcon = New Bitmap(
-                source, New Size(iconSize, iconSize))
-        End Using
-
-        button.Image = searchIcon
-        button.ImageAlign = ContentAlignment.MiddleCenter
-        button.TextImageRelation =
-            TextImageRelation.ImageBeforeText
-
-        AddHandler Disposed, Sub() searchIcon.Dispose()
-
+        If DesignMode OrElse ComponentModel.LicenseManager.UsageMode = ComponentModel.LicenseUsageMode.Designtime Then Return
+        ' Keep the designer columns unbound so its grid designer retains every heading.
+        For Each column As DataGridViewColumn In StyledDataGridView1.Columns
+            If column IsNot colActions AndAlso column.Name <> "colToday" Then column.DataPropertyName = column.Name.Substring(3)
+        Next
+        adminaccContentHolder.Dock = DockStyle.None
+        colBranch.FillWeight = 126F
+        StyledDataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        StyledDataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders
+        StyledDataGridView1.ReadOnly = True
+        StyledDataGridView1.AllowUserToAddRows = False
+        StyledDataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        BackColor = Color.FromArgb(241, 245, 249)
+        searchButton.AccessibleName = "Apply account filters"
+        searchButton.IconFileName = "search.png"
+        AddHandler Me.Resize, AddressOf Arrange
+        Arrange(Me, EventArgs.Empty)
+        statusComboBox.Items.Clear()
+        statusComboBox.Items.AddRange({"All Status", "Active", "On Leave", "Resigned", "Terminated"})
+        statusComboBox.SelectedIndex = 0
+        ReloadAccounts()
     End Sub
 
-    Private Sub LoadBranches()
+    Private Sub Arrange(sender As Object, e As EventArgs)
+        Dim scale = DeviceDpi / 96.0R
+        Dim inset = CInt(14 * scale), gap = CInt(10 * scale), h = CInt(36 * scale)
+        Dim top = CInt(14 * scale), gridY = top * 2 + h
+        Dim headerH = CInt(36 * scale), rowH = CInt(50 * scale)
+        Dim cardWidth = Math.Max(1, ClientSize.Width - inset * 2)
+        adminaccContentHolder.SetBounds(inset, gap, cardWidth, Math.Max(1, ClientSize.Height - 2 * gap))
+        searchButton.SetBounds(inset, top, CInt(46 * scale), h)
+        Dim x = searchButton.Right + gap
+        Dim w = Math.Max(1, (cardWidth - x - inset - gap) \ 2)
+        branchesComboBox.SetBounds(x, top, w, h)
+        statusComboBox.SetBounds(x + w + gap, top, w, h)
+        StyledDataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        StyledDataGridView1.ColumnHeadersHeight = headerH
+        StyledDataGridView1.RowTemplate.MinimumHeight = rowH
+        StyledDataGridView1.RowTemplate.Height = rowH
+        colID.DefaultCellStyle.Padding = New Padding(CInt(10 * scale), 0, CInt(10 * scale), 0)
+        colName.DefaultCellStyle.Padding = New Padding(CInt(30 * scale), 3, CInt(4 * scale), 3)
+        Dim gridWidth = statusComboBox.Right - searchButton.Left
+        StyledDataGridView1.SetBounds(searchButton.Left, gridY, Math.Max(1, gridWidth), Math.Max(1, adminaccContentHolder.Height - gridY - 3))
+    End Sub
 
-        Dim connectionString As String =
-            "Server=localhost;Port=3306;" &
-            "Database=k4j_database;" &
-            "Uid=root;Pwd=;"
+    Private Shared Function DisplayBranchName(value As Object) As String
+        Dim branch = Convert.ToString(value).Trim()
+        Select Case branch.ToUpperInvariant()
+            Case "SAMPLE JPANG BRANCH"
+                Return "JPang Branch"
+            Case "SAMPLE DAET BRANCH"
+                Return "Daet Branch"
+            Case Else
+                Return branch
+        End Select
+    End Function
 
-        Dim query As String =
-            "SELECT branch_id, branch_name, location, " &
-            "manager_name, contact_number " &
-            "FROM tbl_branch ORDER BY branch_id"
-
+    Friend Sub ReloadAccounts() Handles searchButton.Click
         Try
-            Dim matches = Controls.Find(
-                "StyledDataGridView1", True)
-
-            If matches.Length = 0 Then
-                MessageBox.Show(
-                    "StyledDataGridView1 was not found.")
-                Return
-            End If
-
-            Dim grid = TryCast(
-                matches(0), DataGridView)
-
-            If grid Is Nothing Then
-                MessageBox.Show(
-                    "StyledDataGridView must inherit DataGridView.")
-                Return
-            End If
-
-            Using conn As New MySqlConnection(connectionString)
-                Using adapter As New MySqlDataAdapter(query, conn)
-
-                    Dim dt As New DataTable()
-                    adapter.Fill(dt)
-
-                    grid.AutoGenerateColumns = True
-                    grid.DataSource = dt
-
-                    grid.ReadOnly = True
-                    grid.AllowUserToAddRows = False
-
-                    grid.AutoSizeColumnsMode =
-                        DataGridViewAutoSizeColumnsMode.Fill
-
-                End Using
-            End Using
-
+            Dim previous As Integer = -1
+            If branchRows IsNot Nothing AndAlso branchesComboBox.SelectedIndex > 0 Then previous = CInt(branchRows.Rows(branchesComboBox.SelectedIndex - 1)("branch_id"))
+            branchRows = EmployeeData.Branches()
+            branchesComboBox.Items.Clear()
+            branchesComboBox.Items.Add("All Branches")
+            branchesComboBox.SelectedIndex = 0
+            For Each row As DataRow In branchRows.Rows
+                Dim index = branchesComboBox.Items.Add(DisplayBranchName(row("branch_name")))
+                If CInt(row("branch_id")) = previous Then branchesComboBox.SelectedIndex = index
+            Next
+            Dim branch As Object = DBNull.Value
+            Dim status As Object = DBNull.Value
+            If branchesComboBox.SelectedIndex > 0 Then branch = branchRows.Rows(branchesComboBox.SelectedIndex - 1)("branch_id")
+            If statusComboBox.SelectedIndex > 0 Then status = statusComboBox.SelectedItem
+            clickedAccount = Nothing
+            StyledDataGridView1.DataSource = EmployeeData.Accounts(AccountRole, branch, status)
+            StyledDataGridView1.CurrentCell = Nothing
+            StyledDataGridView1.ClearSelection()
+            RaiseEvent AccountsReloaded()
+            Arrange(Me, EventArgs.Empty)
         Catch ex As Exception
-            MessageBox.Show(
-                "Error loading records: " & ex.Message,
-                "Database Error",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error)
+            MessageBox.Show("Could not load " & AccountRole & " accounts: " & ex.Message)
         End Try
-
     End Sub
 End Class
+

@@ -236,6 +236,7 @@ Public Class SuperAdminSidebarNavigation
                 If host Is Nothing Then host = Me
                 Using transition As New PanelTransition(host)
                     RaiseEvent NavigateRequested(page)
+                    SidebarNavigation.OpenPage(Me, page)
                 End Using
             Finally
                 _navigationBusy = False
@@ -286,7 +287,9 @@ Public Class SuperAdminSidebarNavigation
         e As EventArgs
     )
 
+        If Not SidebarNavigation.ConfirmSignOut(Me) Then Return
         RaiseEvent SignOutRequested()
+        SidebarNavigation.SignOut(Me)
 
     End Sub
 

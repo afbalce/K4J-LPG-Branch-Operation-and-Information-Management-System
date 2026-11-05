@@ -9,6 +9,8 @@ Public Class SuperAdminAddAdminAccount
     Public Event SignOutRequested()
 
     Private Sub PageLoaded(sender As Object, e As EventArgs) Handles MyBase.Load
+        AddEmployeeAccount1.EmployeeRole = "Admin"
+        AddHandler AddEmployeeAccount1.Finished, AddressOf BackToAccounts
         HeaderBar1.SetParentPageName("Super Admin")
         HeaderBar1.SetPageName("Add Admin")
         SystemHeading1.SetHeading("ADD ADMIN ACCOUNT", "Create a new branch administrator")
@@ -151,6 +153,8 @@ Public Class SuperAdminAddAdminAccount
     Private Sub SidebarSignOut() Handles SuperAdminSidebarNavigation1.SignOutRequested
         RaiseEvent SignOutRequested()
     End Sub
+
 End Class
+
 
 

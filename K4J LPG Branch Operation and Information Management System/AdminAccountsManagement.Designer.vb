@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AdminAccountsManagement
     Inherits System.Windows.Forms.UserControl
 
@@ -26,7 +26,16 @@ Partial Class AdminAccountsManagement
         Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AdminAccountsManagement))
         adminaccContentHolder = New RoundedTitlePanel()
-        StyledDataGridView1 = New StyledDataGridView()
+        StyledDataGridView1 = New EmployeeAccountsGrid()
+        colID = New DataGridViewTextBoxColumn()
+        colName = New DataGridViewTextBoxColumn()
+        colRole = New DataGridViewTextBoxColumn()
+        colBranch = New DataGridViewTextBoxColumn()
+        colStatus = New DataGridViewTextBoxColumn()
+        colPhone = New DataGridViewTextBoxColumn()
+        colEmail = New DataGridViewTextBoxColumn()
+        colLastLogin = New DataGridViewTextBoxColumn()
+        colActions = New DataGridViewTextBoxColumn()
         statusComboBox = New RoundedComboBox()
         branchesComboBox = New RoundedComboBox()
         searchButton = New RoundedButton()
@@ -52,37 +61,86 @@ Partial Class AdminAccountsManagement
         ' StyledDataGridView1
         ' 
         StyledDataGridView1.AllowUserToAddRows = False
+        StyledDataGridView1.AutoGenerateColumns = False
+        StyledDataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        StyledDataGridView1.Columns.AddRange(New DataGridViewColumn() {colID, colName, colEmail, colPhone, colBranch, colRole, colLastLogin, colStatus, colActions})
+        colID.Name = "colID"
+        colID.HeaderText = "ID"
+        colID.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        colID.DefaultCellStyle.Padding = New Padding(10, 0, 10, 0)
+        colID.MinimumWidth = 70
+        colName.Name = "colName"
+        colName.HeaderText = "NAME"
+        colName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+        colName.DefaultCellStyle.Padding = New Padding(30, 3, 4, 3)
+        colName.DefaultCellStyle.WrapMode = DataGridViewTriState.True
+        colName.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        colName.FillWeight = 193F
+        colName.MinimumWidth = 150
+        colEmail.Name = "colEmail"
+        colEmail.HeaderText = "EMAIL"
+        colEmail.FillWeight = 153F
+        colEmail.MinimumWidth = 101
+        colPhone.Name = "colPhone"
+        colPhone.HeaderText = "PHONE"
+        colPhone.FillWeight = 111F
+        colPhone.MinimumWidth = 74
+        colBranch.Name = "colBranch"
+        colBranch.HeaderText = "BRANCH"
+        colBranch.FillWeight = 126F
+        colBranch.MinimumWidth = 92
+        colRole.Name = "colRole"
+        colRole.HeaderText = "ROLE"
+        colRole.FillWeight = 160F
+        colRole.MinimumWidth = 118
+        colRole.DefaultCellStyle.Padding = New Padding(8, 0, 8, 0)
+        colRole.DefaultCellStyle.WrapMode = DataGridViewTriState.True
+        colLastLogin.Name = "colLastLogin"
+        colLastLogin.HeaderText = "LAST LOGIN"
+        colLastLogin.DefaultCellStyle.WrapMode = DataGridViewTriState.True
+        colLastLogin.FillWeight = 103F
+        colLastLogin.MinimumWidth = 85
+        colStatus.Name = "colStatus"
+        colStatus.HeaderText = "STATUS"
+        colStatus.FillWeight = 90F
+        colStatus.MinimumWidth = 64
+        colActions.Name = "colActions"
+        colActions.HeaderText = "ACTIONS"
+        colActions.FillWeight = 66F
+        colActions.MinimumWidth = 49
         StyledDataGridView1.BackgroundColor = Color.White
         StyledDataGridView1.BodyBackgroundColor = Color.White
         StyledDataGridView1.BorderStyle = BorderStyle.None
         StyledDataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None
+        StyledDataGridView1.ColumnHeadersVisible = True
         StyledDataGridView1.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = Color.FromArgb(CByte(249), CByte(250), CByte(251))
-        DataGridViewCellStyle1.Font = New Font("Segoe UI", 9F)
-        DataGridViewCellStyle1.ForeColor = Color.FromArgb(CByte(153), CByte(161), CByte(175))
-        DataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True
+        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = Color.FromArgb(249, 250, 251)
+        DataGridViewCellStyle1.Font = New Font("Inter SemiBold", 10F, FontStyle.Regular, GraphicsUnit.Pixel)
+        DataGridViewCellStyle1.ForeColor = Color.FromArgb(100, 116, 139)
+        DataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(249, 250, 251)
+        DataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(71, 85, 105)
+        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.False
         StyledDataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        StyledDataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft
+        StyledDataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        StyledDataGridView1.ColumnHeadersHeight = 32
+        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle2.BackColor = Color.White
-        DataGridViewCellStyle2.Font = New Font("Segoe UI", 9F)
+        DataGridViewCellStyle2.Font = New Font("Inter Medium", 12F, FontStyle.Regular, GraphicsUnit.Pixel)
         DataGridViewCellStyle2.ForeColor = Color.FromArgb(CByte(54), CByte(65), CByte(83))
-        DataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(CByte(239), CByte(246), CByte(255))
+        DataGridViewCellStyle2.SelectionBackColor = Color.White
         DataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(CByte(15), CByte(23), CByte(42))
         DataGridViewCellStyle2.WrapMode = DataGridViewTriState.False
         StyledDataGridView1.DefaultCellStyle = DataGridViewCellStyle2
         StyledDataGridView1.EnableHeadersVisualStyles = False
-        StyledDataGridView1.HeaderBackgroundColor = Color.FromArgb(CByte(249), CByte(250), CByte(251))
-        StyledDataGridView1.Location = New Point(5, 61)
+        StyledDataGridView1.HeaderBackgroundColor = Color.FromArgb(249, 250, 251)
+        StyledDataGridView1.Location = New Point(14, 61)
         StyledDataGridView1.Name = "StyledDataGridView1"
         StyledDataGridView1.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None
         StyledDataGridView1.RowHeadersVisible = False
         StyledDataGridView1.RowHeadersWidth = 62
         StyledDataGridView1.RowTemplate.Height = 48
-        StyledDataGridView1.Size = New Size(905, 389)
+        StyledDataGridView1.Size = New Size(890, 389)
         StyledDataGridView1.TabIndex = 4
         ' 
         ' statusComboBox
@@ -99,10 +157,10 @@ Partial Class AdminAccountsManagement
         statusComboBox.HintFont = New Font("Inter", 7F)
         statusComboBox.HintFontSize = 7F
         statusComboBox.HintText = "All Status"
-        statusComboBox.Location = New Point(495, 5)
-        statusComboBox.MinimumSize = New Size(90, 48)
+        statusComboBox.Location = New Point(494, 12)
+        statusComboBox.MinimumSize = New Size(60, 28)
         statusComboBox.Name = "statusComboBox"
-        statusComboBox.Size = New Size(415, 50)
+        statusComboBox.Size = New Size(410, 36)
         statusComboBox.TabIndex = 3
         statusComboBox.TabStop = False
         statusComboBox.TextColor = Color.FromArgb(CByte(50), CByte(50), CByte(50))
@@ -122,10 +180,10 @@ Partial Class AdminAccountsManagement
         branchesComboBox.HintFont = New Font("Inter", 7F)
         branchesComboBox.HintFontSize = 7F
         branchesComboBox.HintText = "All Branches"
-        branchesComboBox.Location = New Point(74, 5)
-        branchesComboBox.MinimumSize = New Size(90, 48)
+        branchesComboBox.Location = New Point(70, 12)
+        branchesComboBox.MinimumSize = New Size(60, 28)
         branchesComboBox.Name = "branchesComboBox"
-        branchesComboBox.Size = New Size(415, 50)
+        branchesComboBox.Size = New Size(410, 36)
         branchesComboBox.TabIndex = 2
         branchesComboBox.TabStop = False
         branchesComboBox.TextColor = Color.FromArgb(CByte(50), CByte(50), CByte(50))
@@ -144,12 +202,12 @@ Partial Class AdminAccountsManagement
         searchButton.IconWidth = 24
         searchButton.Image = CType(resources.GetObject("searchButton.Image"), Image)
         searchButton.ImageAlign = ContentAlignment.MiddleLeft
-        searchButton.Location = New Point(5, 5)
+        searchButton.Location = New Point(14, 12)
         searchButton.MinimumSize = New Size(45, 25)
         searchButton.Name = "searchButton"
-        searchButton.Size = New Size(50, 50)
+        searchButton.Size = New Size(46, 36)
         searchButton.TabIndex = 1
-        searchButton.Text = "Button"
+        searchButton.Text = ""
         searchButton.TextImageRelation = TextImageRelation.ImageBeforeText
         searchButton.UseVisualStyleBackColor = False
         ' 
@@ -169,6 +227,17 @@ Partial Class AdminAccountsManagement
     Friend WithEvents branchesComboBox As RoundedComboBox
     Friend WithEvents searchButton As RoundedButton
     Friend WithEvents statusComboBox As RoundedComboBox
-    Friend WithEvents StyledDataGridView1 As StyledDataGridView
+    Friend WithEvents StyledDataGridView1 As EmployeeAccountsGrid
+    Friend WithEvents colID As DataGridViewTextBoxColumn
+    Friend WithEvents colName As DataGridViewTextBoxColumn
+    Friend WithEvents colRole As DataGridViewTextBoxColumn
+    Friend WithEvents colBranch As DataGridViewTextBoxColumn
+    Friend WithEvents colStatus As DataGridViewTextBoxColumn
+    Friend WithEvents colPhone As DataGridViewTextBoxColumn
+    Friend WithEvents colEmail As DataGridViewTextBoxColumn
+    Friend WithEvents colLastLogin As DataGridViewTextBoxColumn
+    Friend WithEvents colActions As DataGridViewTextBoxColumn
 
 End Class
+
+

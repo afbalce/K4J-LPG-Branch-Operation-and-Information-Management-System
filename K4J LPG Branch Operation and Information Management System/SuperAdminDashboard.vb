@@ -93,6 +93,7 @@ Public Class SuperAdminDashboard
             ' ==================================
 
             SetupSidebarNavigation()
+            sidebarNavigation?.SetActivePage("Dashboard")
 
             layoutReady = True
 
